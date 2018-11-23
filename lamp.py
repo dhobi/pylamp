@@ -29,14 +29,11 @@ class Lamp:
         self.BLUE.start(100)
         print('...done.')
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
+    def destroy(self):
         GPIO.cleanup()
 
     def color(self, red, green, blue):
-        print('Set lamp to r'+str(red)+', g'+str(green)+', b'+str(blue))
+        print('Set lamp to r' + str(red) + ', g' + str(green) + ', b' + str(blue))
         self.RED.ChangeDutyCycle(100 - red / 2.55)
         self.GREEN.ChangeDutyCycle(100 - green / 2.55)
         self.BLUE.ChangeDutyCycle(100 - blue / 2.55)

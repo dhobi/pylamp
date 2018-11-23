@@ -11,8 +11,10 @@ from autobahn.twisted.websocket import WebSocketServerFactory, \
 
 from autobahn.twisted.resource import WebSocketResource
 
+
 class LampHolder:
     myLamp = lamp.Lamp()
+
 
 class SomeServerProtocol(WebSocketServerProtocol):
     def onConnect(self, request):
@@ -21,6 +23,10 @@ class SomeServerProtocol(WebSocketServerProtocol):
     def onMessage(self, payload, isBinary):
         colors = json.loads(payload)
         LampHolder.myLamp.color(colors['r'], colors['g'], colors['b'])
+
+
+def clean():
+    LampHolder.myLamp.destroy()
 
 
 if __name__ == "__main__":
@@ -36,5 +42,6 @@ if __name__ == "__main__":
     root.putChild(u"ws", resource)
 
     site = Site(root)
+    reactor.addSystemEventTrigger('during', 'shutdown', clean)
     reactor.listenTCP(80, site)
     reactor.run()
