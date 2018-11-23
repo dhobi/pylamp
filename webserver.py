@@ -20,9 +20,9 @@ class SomeServerProtocol(WebSocketServerProtocol):
         print("some request connected {}".format(request))
 
     def onMessage(self, payload, isBinary):
+        print('received'+ str(payload))
         colors = json.loads(payload)
         self.lamp.color(colors.r, colors.g, colors.b)
-        self.sendMessage("message received")
 
 
 if __name__ == "__main__":
