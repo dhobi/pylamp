@@ -21,6 +21,7 @@ class Lamp:
         GPIO.cleanup()
 
     def color(self, red, green, blue):
+        print('Set lamp to r'+red+', g'+green+', b'+blue)
         self.RED.ChangeDutyCycle(100 - red / 255)
         self.GREEN.ChangeDutyCycle(100 - green / 255)
         self.RED.ChangeDutyCycle(100 - blue / 255)
