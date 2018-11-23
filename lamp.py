@@ -20,7 +20,7 @@ class Lamp:
     def __exit__(self, exc_type, exc_value, traceback):
         GPIO.cleanup()
 
-    def color(self, red: int, green: int, blue: int):
+    def color(self, red, green, blue):
         self.RED.ChangeDutyCycle(100 - red / 255)
         self.GREEN.ChangeDutyCycle(100 - green / 255)
         self.RED.ChangeDutyCycle(100 - blue / 255)
