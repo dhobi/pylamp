@@ -30,6 +30,7 @@ class Lamp:
         print('...done.')
 
     def destroy(self):
+        print('resetting lamp')
         GPIO.cleanup()
 
     def color(self, red, green, blue):
