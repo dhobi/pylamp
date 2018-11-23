@@ -39,4 +39,4 @@ class Lamp:
         print('Set lamp to r'+str(red)+', g'+str(green)+', b'+str(blue))
         self.RED.ChangeDutyCycle(100 - red / 2.55)
         self.GREEN.ChangeDutyCycle(100 - green / 2.55)
-        self.RED.ChangeDutyCycle(100 - blue / 2.55)
+        self.BLUE.ChangeDutyCycle(100 - blue / 2.55)
