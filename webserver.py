@@ -22,8 +22,9 @@ class SomeServerProtocol(WebSocketServerProtocol):
 
     def onMessage(self, payload, isBinary):
         data = json.loads(payload)
+        value = data['value']
         if data['message'] == 'color':
-            LampHolder.myLamp.color(data['message']['r'], data['message']['g'], data['message']['b'])
+            LampHolder.myLamp.color(value['r'], value['g'], value['b'])
         elif data['message'] == 'power':
             LampHolder.myLamp.toggle()
         else:
