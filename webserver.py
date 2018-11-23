@@ -11,17 +11,16 @@ from autobahn.twisted.websocket import WebSocketServerFactory, \
 
 from autobahn.twisted.resource import WebSocketResource
 
+class LampHolder:
+    myLamp = lamp.Lamp()
 
 class SomeServerProtocol(WebSocketServerProtocol):
-    def __init__(self):
-        WebSocketServerProtocol.__init__(self)
-        self.lamp = lamp.Lamp()
     def onConnect(self, request):
         print("some request connected {}".format(request))
 
     def onMessage(self, payload, isBinary):
         colors = json.loads(payload)
-        self.lamp.color(colors['r'], colors['g'], colors['b'])
+        LampHolder.myLamp.color(colors['r'], colors['g'], colors['b'])
 
 
 if __name__ == "__main__":
