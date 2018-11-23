@@ -14,6 +14,7 @@ from autobahn.twisted.resource import WebSocketResource
 
 class SomeServerProtocol(WebSocketServerProtocol):
     def __init__(self):
+        WebSocketServerProtocol.__init__(self)
         self.lamp = lamp.Lamp()
     def onConnect(self, request):
         print("some request connected {}".format(request))
