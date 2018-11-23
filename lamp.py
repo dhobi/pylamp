@@ -12,7 +12,6 @@ class Lamp:
     currentgreen = 100
 
     def __init__(self):
-        print('lamp initialising...')
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
 
@@ -44,11 +43,9 @@ class Lamp:
         self.ISRUNNING = False
 
     def destroy(self):
-        print('resetting lamp')
         GPIO.cleanup()
 
     def color(self, red, green, blue):
-        print('Set lamp to r' + str(red) + ', g' + str(green) + ', b' + str(blue))
         self.currentred = 100 - red / 2.55
         self.currentgreen = 100 - green / 2.55
         self.currentblue = 100 - blue / 2.55
