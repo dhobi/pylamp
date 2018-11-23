@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 
 
 class Lamp:
-    def __init__(self, red: int = 16, green: int = 20, blue: int = 21, freq: int = 100):
+    def __init__(self, red = 16, green = 20, blue = 21, freq = 100):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
 
