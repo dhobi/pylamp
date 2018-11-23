@@ -24,10 +24,20 @@ class Lamp:
         self.GREEN = GPIO.PWM(green, freq)
         self.BLUE = GPIO.PWM(blue, freq)
 
+        self.start()
+        print('...done.')
+
+    def start(self):
         self.RED.start(100)
         self.GREEN.start(100)
         self.BLUE.start(100)
-        print('...done.')
+        self.ISRUNNING = True
+
+    def stop(self):
+        self.RED.stop()
+        self.GREEN.stop()
+        self.BLUE.stop()
+        self.ISRUNNING = False
 
     def destroy(self):
         print('resetting lamp')
@@ -38,3 +48,9 @@ class Lamp:
         self.RED.ChangeDutyCycle(100 - red / 2.55)
         self.GREEN.ChangeDutyCycle(100 - green / 2.55)
         self.BLUE.ChangeDutyCycle(100 - blue / 2.55)
+
+    def toggle(self):
+        if self.ISRUNNING:
+            self.stop()
+        else:
+            self.start()

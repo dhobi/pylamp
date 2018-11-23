@@ -21,9 +21,13 @@ class SomeServerProtocol(WebSocketServerProtocol):
         print("some request connected {}".format(request))
 
     def onMessage(self, payload, isBinary):
-        colors = json.loads(payload)
-        LampHolder.myLamp.color(colors['r'], colors['g'], colors['b'])
-
+        data = json.loads(payload)
+        if data['message'] == 'color':
+            LampHolder.myLamp.color(data['message']['r'], data['message']['g'], data['message']['b'])
+        elif data['message'] == 'power':
+            LampHolder.myLamp.toggle()
+        else:
+            print('Message '+str(data)+' is not valid')
 
 def clean():
     LampHolder.myLamp.destroy()
