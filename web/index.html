@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PyLamp</title>
+
+   <link rel="stylesheet" type="text/css" href="http://bgrins.github.com/spectrum/spectrum.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://bgrins.github.com/spectrum/spectrum.js"></script>
+
+    <script>
+
+        $(function() {
+            var socket = new WebSocket("ws://" + location.host + "/ws");
+            socket.onmessage = function (event) {
+               console.log('I received something? '+event.data);
+            };
+
+            $(".basic").spectrum({
+                flat: true,
+                color: "#fff",
+                move: function(color) {
+                    mySocket.send(JSON.stringify(color.toRgb()));
+                }
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <input type='text' class="basic"/>
+</body>
+</html>
