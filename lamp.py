@@ -33,6 +33,9 @@ class Lamp:
 
     def start(self):
         self.ISRUNNING = True
+        self.RED.ChangeDutyCycle(self.currentred)
+        self.GREEN.ChangeDutyCycle(self.currentgreen)
+        self.BLUE.ChangeDutyCycle(self.currentblue)
 
     def stop(self):
         self.RED.ChangeDutyCycle(100)
