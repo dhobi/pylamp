@@ -33,11 +33,11 @@
                     $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString())
                 }
             });
-        });
 
-        $('button').on('click', function() {
-            $(this).toggleClass('off');
-            socket.send(JSON.stringify({ message: 'power', value: {}}));
+            $('button').on('click', function() {
+                $(this).toggleClass('off');
+                socket.send(JSON.stringify({ message: 'power', value: {}}));
+            });
         });
 
     </script>
