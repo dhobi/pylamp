@@ -2,27 +2,27 @@ import RPi.GPIO as GPIO
 
 
 class Lamp:
+    red = 16
+    green = 20
+    blue = 21
+    freq = 100
+
     def __init__(self):
         print('lamp initialising...')
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
 
-        red = 16
-        green = 20
-        blue = 21
-        freq = 100
+        GPIO.setup(self.red, GPIO.OUT)
+        GPIO.setup(self.green, GPIO.OUT)
+        GPIO.setup(self.blue, GPIO.OUT)
 
-        GPIO.setup(red, GPIO.OUT)
-        GPIO.setup(green, GPIO.OUT)
-        GPIO.setup(blue, GPIO.OUT)
+        GPIO.output(self.red, 1)
+        GPIO.output(self.green, 1)
+        GPIO.output(self.blue, 1)
 
-        GPIO.output(red, 1)
-        GPIO.output(green, 1)
-        GPIO.output(blue, 1)
-
-        self.RED = GPIO.PWM(red, freq)
-        self.GREEN = GPIO.PWM(green, freq)
-        self.BLUE = GPIO.PWM(blue, freq)
+        self.RED = GPIO.PWM(self.red, self.freq)
+        self.GREEN = GPIO.PWM(self.green, self.freq)
+        self.BLUE = GPIO.PWM(self.blue, self.freq)
 
         self.start()
         print('...done.')
@@ -37,6 +37,11 @@ class Lamp:
         self.RED.stop()
         self.GREEN.stop()
         self.BLUE.stop()
+
+        GPIO.output(self.red, 1)
+        GPIO.output(self.green, 1)
+        GPIO.output(self.blue, 1)
+
         self.ISRUNNING = False
 
     def destroy(self):
