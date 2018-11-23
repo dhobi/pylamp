@@ -23,7 +23,7 @@
                 flat: true,
                 color: "#fff",
                 move: function(color) {
-                    mySocket.send(JSON.stringify(color.toRgb()));
+                    socket.send(JSON.stringify(color.toRgb()));
                 }
             });
         });
