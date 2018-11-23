@@ -7,6 +7,10 @@ class Lamp:
     blue = 21
     freq = 100
 
+    currentred = 100
+    currentblue = 100
+    currentgreen = 100
+
     def __init__(self):
         print('lamp initialising...')
         GPIO.setmode(GPIO.BCM)
@@ -16,10 +20,6 @@ class Lamp:
         GPIO.setup(self.green, GPIO.OUT)
         GPIO.setup(self.blue, GPIO.OUT)
 
-        GPIO.output(self.red, 1)
-        GPIO.output(self.green, 1)
-        GPIO.output(self.blue, 1)
-
         self.RED = GPIO.PWM(self.red, self.freq)
         self.GREEN = GPIO.PWM(self.green, self.freq)
         self.BLUE = GPIO.PWM(self.blue, self.freq)
@@ -28,19 +28,19 @@ class Lamp:
         print('...done.')
 
     def start(self):
-        self.RED.start(100)
-        self.GREEN.start(100)
-        self.BLUE.start(100)
+        self.RED.start(self.currentred)
+        self.GREEN.start(self.currentgreen)
+        self.BLUE.start(self.currentblue)
         self.ISRUNNING = True
 
     def stop(self):
+        self.RED.ChangeDutyCycle(100)
+        self.GREEN.ChangeDutyCycle(100)
+        self.BLUE.ChangeDutyCycle(100)
+
         self.RED.stop()
         self.GREEN.stop()
         self.BLUE.stop()
-
-        GPIO.output(self.red, 1)
-        GPIO.output(self.green, 1)
-        GPIO.output(self.blue, 1)
 
         self.ISRUNNING = False
 
@@ -50,9 +50,14 @@ class Lamp:
 
     def color(self, red, green, blue):
         print('Set lamp to r' + str(red) + ', g' + str(green) + ', b' + str(blue))
-        self.RED.ChangeDutyCycle(100 - red / 2.55)
-        self.GREEN.ChangeDutyCycle(100 - green / 2.55)
-        self.BLUE.ChangeDutyCycle(100 - blue / 2.55)
+        self.currentred = 100 - red / 2.55
+        self.currentgreen = 100 - green / 2.55
+        self.currentblue = 100 - blue / 2.55
+
+        if self.ISRUNNING:
+            self.RED.ChangeDutyCycle(self.currentred)
+            self.GREEN.ChangeDutyCycle(self.currentgreen)
+            self.BLUE.ChangeDutyCycle(self.currentblue)
 
     def toggle(self):
         if self.ISRUNNING:
