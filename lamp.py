@@ -24,9 +24,9 @@ class Lamp:
         self.GREEN = GPIO.PWM(green, freq)
         self.BLUE = GPIO.PWM(blue, freq)
 
-        self.RED.ChangeDutyCycle(100)
-        self.GREEN.ChangeDutyCycle(100)
-        self.RED.ChangeDutyCycle(100)
+        self.RED.start(100)
+        self.GREEN.start(100)
+        self.BLUE.start(100)
         print('...done.')
 
     def __enter__(self):
