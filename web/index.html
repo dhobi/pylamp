@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>PyLamp Potion</title>
 
-   <link rel="stylesheet" type="text/css" href="http://bgrins.github.com/spectrum/spectrum.css">
+    <link rel="stylesheet" type="text/css" href="http://bgrins.github.com/spectrum/spectrum.css">
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
@@ -20,6 +20,16 @@
                 $('button').addClass('off');
             }
             $(".basic").spectrum("set", 'rgb('+red+','+green+','+blue+')');
+            setPageColor(tinycolor('rgb('+red+','+green+','+blue+')'));
+        }
+        function setPageColor(color) {
+            var rgbValue = color.toRgb()
+             $('h1').css('color', color.toHexString())
+                        .css('text-shadow', '0 0 10px rgb('+(255-rgbValue.r)+','+(255-rgbValue.g)+','+(255-rgbValue.b)+')');
+
+                    $('.potion-color-dark').attr("style", "fill:"+color.toHexString())
+                    $('.potion-color-light').attr("style", "fill:"+color.lighten(10).toHexString())
+                    $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString())
         }
 
         $(function() {
@@ -39,14 +49,8 @@
                 flat: true,
                 color: "#fff",
                 move: function(color) {
-                    var rgbValue = color.toRgb();
-                    socket.send(JSON.stringify({ message: 'color', value: rgbValue}));
-                    $('h1').css('color', color.toHexString())
-                        .css('text-shadow', '0 0 10px rgb('+(255-rgbValue.r)+','+(255-rgbValue.g)+','+(255-rgbValue.b)+')');
-
-                    $('.potion-color-dark').attr("style", "fill:"+color.toHexString())
-                    $('.potion-color-light').attr("style", "fill:"+color.lighten(10).toHexString())
-                    $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString())
+                    socket.send(JSON.stringify({ message: 'color', value: color.toRgb()}));
+                    setPageColor(color);
                 }
             });
             $(".basic").on("dragstart.spectrum", function(e, color) {
@@ -62,6 +66,7 @@
                 socket.send(JSON.stringify({ message: 'power', value: {}}));
             });
         });
+
 
     </script>
     <style>
@@ -113,29 +118,32 @@
             background-color:black;
             color:white;
         }
+
     </style>
 </head>
 <body>
 <h1>PyLamp Potion</h1>
 <div id="content">
     <div style="min-width:430px">
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+             x="0px" y="0px"
+             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
         <path style="fill:#E0E0E2;" d="M442.947,294.957c-10.17-68.812-56.721-125.591-120.164-149.374V33.391h16.327
             c9.22,0,16.696-7.475,16.696-16.696S348.33,0,339.11,0H172.153c-9.22,0-16.696,7.475-16.696,16.696s7.475,16.696,16.696,16.696
             h17.064v112.464C125.774,169.8,79.184,226.412,69.053,294.957c-1.346,9.106-2.271,18.346-2.271,27.826
             C66.783,427.284,151.497,512,256,512s189.217-84.716,189.217-189.217C445.217,313.303,444.292,304.062,442.947,294.957z"/>
-        <path style="fill:#C6C5CA;" d="M442.947,294.957c-10.17-68.812-56.721-125.591-120.164-149.374V33.391h16.327
+            <path style="fill:#C6C5CA;" d="M442.947,294.957c-10.17-68.812-56.721-125.591-120.164-149.374V33.391h16.327
             c9.22,0,16.696-7.475,16.696-16.696S348.33,0,339.11,0H256v294.957V512c104.501,0,189.217-84.716,189.217-189.217
             C445.217,313.303,444.292,304.062,442.947,294.957z"/>
-        <path class="potion-color-light" style="fill:#ffffff;" d="M69.053,294.957c-1.346,9.106-2.271,18.346-2.271,27.826C66.783,427.284,151.497,512,256,512
+            <path class="potion-color-light" style="fill:#ffffff;" d="M69.053,294.957c-1.346,9.106-2.271,18.346-2.271,27.826C66.783,427.284,151.497,512,256,512
             s189.217-84.716,189.217-189.217c0-9.48-0.925-18.72-2.271-27.826H69.053z"/>
-        <path class="potion-color-dark" style="fill:#ffffff;" d="M256,294.957V512c104.501,0,189.217-84.716,189.217-189.217c0-9.48-0.925-18.72-2.271-27.826H256z"/>
-        <g>
+            <path class="potion-color-dark" style="fill:#ffffff;"
+                  d="M256,294.957V512c104.501,0,189.217-84.716,189.217-189.217c0-9.48-0.925-18.72-2.271-27.826H256z"/>
+            <g>
             <circle class="potion-color-lightest" style="fill:#ffffff;" cx="283.459" cy="395.13" r="50.087"/>
-            <circle class="potion-color-lightest" style="fill:#ffffff;" cx="183.285" cy="361.739" r="16.696"/>
+                <circle class="potion-color-lightest" style="fill:#ffffff;" cx="183.285" cy="361.739" r="16.696"/>
         </g>
-        <circle class="potion-color-dark" style="fill:#ffffff;" cx="250.067" cy="228.174" r="16.696"/>
+            <circle class="potion-color-dark" style="fill:#ffffff;" cx="250.067" cy="228.174" r="16.696"/>
         </svg>
     </div>
     <input type='text' class="basic"/>
