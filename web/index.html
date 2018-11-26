@@ -12,7 +12,7 @@
     <script type="text/javascript" src="http://bgrins.github.com/spectrum/spectrum.js"></script>
 
     <script>
-
+        var isManipulating = false;
         function setLamp(isOn, red, green, blue) {
             if(isOn) {
                 $('button').removeClass('off');
@@ -30,7 +30,9 @@
 
             socket.onmessage = function (event) {
                var message = JSON.parse(event.data);
-               setLamp(message.isOn, message.red, message.green, message.blue);
+               if(!isManipulating) {
+                setLamp(message.isOn, message.red, message.green, message.blue);
+               }
             }
 
             $(".basic").spectrum({
@@ -45,8 +47,16 @@
                     $('.potion-color-dark').attr("style", "fill:"+color.toHexString())
                     $('.potion-color-light').attr("style", "fill:"+color.lighten(10).toHexString())
                     $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString())
-                }
+                },
+                $(element).on("dragstart.spectrum")
             });
+            $(".basic").on("dragstart.spectrum", function(e, color) {
+                isManipulating = true;
+            }
+
+            $(".basic").on("dragstop.spectrum", function(e, color) {
+                isManipulating = false;
+            }
 
             $('button').on('click', function() {
                 $(this).toggleClass('off');
