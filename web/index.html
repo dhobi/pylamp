@@ -47,8 +47,7 @@
                     $('.potion-color-dark').attr("style", "fill:"+color.toHexString())
                     $('.potion-color-light').attr("style", "fill:"+color.lighten(10).toHexString())
                     $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString())
-                },
-                $(element).on("dragstart.spectrum")
+                }
             });
             $(".basic").on("dragstart.spectrum", function(e, color) {
                 isManipulating = true;
