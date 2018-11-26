@@ -11,6 +11,8 @@ class Lamp:
     currentblue = 0
     currentgreen = 0
 
+    ISRUNNING = False
+
     def start(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
