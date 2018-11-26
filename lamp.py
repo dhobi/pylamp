@@ -12,6 +12,10 @@ class Lamp:
     currentgreen = 100
 
     def __init__(self):
+        self.start()
+        print('...done.')
+
+    def start(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
 
@@ -27,10 +31,6 @@ class Lamp:
         self.GREEN.start(self.currentgreen)
         self.BLUE.start(self.currentblue)
 
-        self.start()
-        print('...done.')
-
-    def start(self):
         self.ISRUNNING = True
         self.RED.ChangeDutyCycle(self.currentred)
         self.GREEN.ChangeDutyCycle(self.currentgreen)
@@ -41,6 +41,7 @@ class Lamp:
         self.GREEN.ChangeDutyCycle(100)
         self.BLUE.ChangeDutyCycle(100)
         self.ISRUNNING = False
+        GPIO.cleanup()
 
     def destroy(self):
         GPIO.cleanup()
