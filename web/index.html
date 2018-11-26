@@ -13,11 +13,25 @@
 
     <script>
 
+        function setLamp(isOn, red, green, blue) {
+            if(isOn) {
+                $('button').removeClass('off');
+            } else {
+                $('button').addClass('off');
+            }
+            $(".basic").spectrum("set", 'rgb('+red+','+green+','+blue+')');
+        }
+
         $(function() {
             var socket = new WebSocket("ws://" + location.host + "/ws");
-            socket.onmessage = function (event) {
-               console.log('I received something? '+event.data);
+            socket.onopen = function(event) {
+              socket.send(JSON.stringify({ message: 'init', value: {}}));
             };
+
+            socket.onmessage = function (event) {
+               var message = JSON.parse(event.data);
+               setLamp(message.isOn, message.red, message.green, message.blue);
+            }
 
             $(".basic").spectrum({
                 flat: true,

@@ -27,8 +27,11 @@ class SomeServerProtocol(WebSocketServerProtocol):
             LampHolder.myLamp.color(value['r'], value['g'], value['b'])
         elif data['message'] == 'power':
             LampHolder.myLamp.toggle()
-        else:
-            print('Message '+str(data)+' is not valid')
+
+        self.sendMessage('{"isOn":' + str(LampHolder.myLamp.ISRUNNING).lower() + ', "red":' + str(
+            LampHolder.myLamp.currentred * 2.55) + ', "green":' + str(
+            LampHolder.myLamp.currentgreen * 2.55) + ', "blue":' + str(LampHolder.myLamp.currentblue * 2.55) + ' }',
+                         isBinary)
 
 def clean():
     LampHolder.myLamp.destroy()
