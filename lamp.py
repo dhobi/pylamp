@@ -7,6 +7,10 @@ class Lamp:
     blue = 21
     freq = 100
 
+    webRed = 0
+    webGreen = 0
+    webBlue = 0
+
     currentred = 0
     currentblue = 0
     currentgreen = 0
@@ -43,6 +47,10 @@ class Lamp:
         GPIO.cleanup()
 
     def color(self, red, green, blue):
+        self.webRed = red
+        self.webGreen = green
+        self.webBlue = blue
+
         self.currentred = 100 - red / 2.55
         self.currentgreen = 100 - green / 2.55
         self.currentblue = 100 - blue / 2.55

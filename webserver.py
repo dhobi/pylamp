@@ -37,8 +37,8 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
             LampHolder.myLamp.toggle()
 
         self.factory.broadcast('{"isOn":' + str(LampHolder.myLamp.ISRUNNING).lower() + ', "red":' + str(
-                LampHolder.myLamp.currentred * 2.55) + ', "green":' + str(
-                LampHolder.myLamp.currentgreen * 2.55) + ', "blue":' + str(LampHolder.myLamp.currentblue * 2.55) + ' }')
+                LampHolder.myLamp.webRed) + ', "green":' + str(
+                LampHolder.myLamp.webGreen) + ', "blue":' + str(LampHolder.myLamp.webBlue) + ' }')
 
     def connectionLost(self, reason):
         WebSocketServerProtocol.connectionLost(self, reason)
