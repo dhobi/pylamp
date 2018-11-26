@@ -16,9 +16,17 @@ class LampHolder:
     myLamp = lamp.Lamp()
 
 
-class SomeServerProtocol(WebSocketServerProtocol):
+def clean():
+    LampHolder.myLamp.destroy()
+
+
+class BroadcastServerProtocol(WebSocketServerProtocol):
+
+    def onOpen(self):
+        self.factory.register(self)
+
     def onConnect(self, request):
-        print("some request connected {}".format(request))
+        print("Client connecting: {}".format(request.peer))
 
     def onMessage(self, payload, isBinary):
         data = json.loads(payload)
@@ -28,13 +36,48 @@ class SomeServerProtocol(WebSocketServerProtocol):
         elif data['message'] == 'power':
             LampHolder.myLamp.toggle()
 
-        self.sendMessage('{"isOn":' + str(LampHolder.myLamp.ISRUNNING).lower() + ', "red":' + str(
-            LampHolder.myLamp.currentred * 2.55) + ', "green":' + str(
-            LampHolder.myLamp.currentgreen * 2.55) + ', "blue":' + str(LampHolder.myLamp.currentblue * 2.55) + ' }',
-                         isBinary)
+            self.factory.broadcast('{"isOn":' + str(LampHolder.myLamp.ISRUNNING).lower() + ', "red":' + str(
+                LampHolder.myLamp.currentred * 2.55) + ', "green":' + str(
+                LampHolder.myLamp.currentgreen * 2.55) + ', "blue":' + str(LampHolder.myLamp.currentblue * 2.55) + ' }',
+                                   isBinary)
 
-def clean():
-    LampHolder.myLamp.destroy()
+    def connectionLost(self, reason):
+        WebSocketServerProtocol.connectionLost(self, reason)
+        self.factory.unregister(self)
+
+
+class BroadcastServerFactory(WebSocketServerFactory):
+    """
+    Simple broadcast server broadcasting any message it receives to all
+    currently connected clients.
+    """
+
+    def __init__(self, url, debug=False, debugCodePaths=False):
+        WebSocketServerFactory.__init__(self, url, debug=debug, debugCodePaths=debugCodePaths)
+        self.clients = []
+        self.tickcount = 0
+        self.tick()
+
+    def tick(self):
+        self.tickcount += 1
+        self.broadcast("tick %d from server" % self.tickcount)
+        reactor.callLater(1, self.tick)
+
+    def register(self, client):
+        if client not in self.clients:
+            print("registered client {}".format(client.peer))
+            self.clients.append(client)
+
+    def unregister(self, client):
+        if client in self.clients:
+            print("unregistered client {}".format(client.peer))
+            self.clients.remove(client)
+
+    def broadcast(self, msg):
+        print("broadcasting message '{}' ..".format(msg))
+        for c in self.clients:
+            c.sendMessage(msg.encode('utf8'))
+            print("message sent to {}".format(c.peer))
 
 
 if __name__ == "__main__":
@@ -43,8 +86,8 @@ if __name__ == "__main__":
     # static file server seving index.html as root
     root = File("./web")
 
-    factory = WebSocketServerFactory(u"ws://127.0.0.1:80")
-    factory.protocol = SomeServerProtocol
+    factory = BroadcastServerFactory(u"ws://127.0.0.1:80")
+    factory.protocol = BroadcastServerProtocol
     resource = WebSocketResource(factory)
     # websockets resource on "/ws" path
     root.putChild(u"ws", resource)
