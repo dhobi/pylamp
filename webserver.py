@@ -36,7 +36,7 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
         elif data['message'] == 'power':
             LampHolder.myLamp.toggle()
 
-            self.factory.broadcast('{"isOn":' + str(LampHolder.myLamp.ISRUNNING).lower() + ', "red":' + str(
+        self.factory.broadcast('{"isOn":' + str(LampHolder.myLamp.ISRUNNING).lower() + ', "red":' + str(
                 LampHolder.myLamp.currentred * 2.55) + ', "green":' + str(
                 LampHolder.myLamp.currentgreen * 2.55) + ', "blue":' + str(LampHolder.myLamp.currentblue * 2.55) + ' }',
                                    isBinary)
@@ -52,8 +52,8 @@ class BroadcastServerFactory(WebSocketServerFactory):
     currently connected clients.
     """
 
-    def __init__(self, url, debug=False, debugCodePaths=False):
-        WebSocketServerFactory.__init__(self, url, debug=debug, debugCodePaths=debugCodePaths)
+    def __init__(self, url):
+        WebSocketServerFactory.__init__(self, url)
         self.clients = []
         self.tickcount = 0
         self.tick()
