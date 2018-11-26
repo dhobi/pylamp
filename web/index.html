@@ -52,11 +52,11 @@
             });
             $(".basic").on("dragstart.spectrum", function(e, color) {
                 isManipulating = true;
-            }
+            })
 
             $(".basic").on("dragstop.spectrum", function(e, color) {
                 isManipulating = false;
-            }
+            })
 
             $('button').on('click', function() {
                 $(this).toggleClass('off');
