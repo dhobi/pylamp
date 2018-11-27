@@ -12,12 +12,10 @@ from autobahn.twisted.websocket import WebSocketServerFactory, \
 from autobahn.twisted.resource import WebSocketResource
 
 
-class LampHolder:
+class ApplicationConstants:
     myLamp = lamp.Lamp()
-
-
-def clean():
-    LampHolder.myLamp.destroy()
+    colormessage = "color"
+    powermessage = "power"
 
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
@@ -31,14 +29,14 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
     def onMessage(self, payload, isBinary):
         data = json.loads(payload)
         value = data['value']
-        if data['message'] == 'color':
-            LampHolder.myLamp.color(value['r'], value['g'], value['b'])
-        elif data['message'] == 'power':
-            LampHolder.myLamp.toggle()
+        if data['message'] == ApplicationConstants.colormessage:
+            ApplicationConstants.myLamp.color(value['r'], value['g'], value['b'])
+        elif data['message'] == ApplicationConstants.powermessage:
+            ApplicationConstants.myLamp.toggle()
 
-        self.factory.broadcast('{"isOn":' + str(LampHolder.myLamp.ISRUNNING).lower() + ', "red":' + str(
-                LampHolder.myLamp.webRed) + ', "green":' + str(
-                LampHolder.myLamp.webGreen) + ', "blue":' + str(LampHolder.myLamp.webBlue) + ' }')
+        self.factory.broadcast('{"isOn":' + str(ApplicationConstants.myLamp.ISRUNNING).lower() + ', "red":' + str(
+            ApplicationConstants.myLamp.webRed) + ', "green":' + str(
+            ApplicationConstants.myLamp.webGreen) + ', "blue":' + str(ApplicationConstants.myLamp.webBlue) + ' }')
 
     def connectionLost(self, reason):
         WebSocketServerProtocol.connectionLost(self, reason)
@@ -72,6 +70,28 @@ class BroadcastServerFactory(WebSocketServerFactory):
             print("message sent to {}".format(c.peer))
 
 
+class ColorPage(Resource):
+    def render_GET(self):
+        return ''
+
+    def render_POST(self, request):
+        try:
+            data = json.loads(request.content.getvalue())
+            ApplicationConstants.myLamp.color(data['r'], data['g'], data['b'])
+            return ''
+        except:
+            return sys.exc_info()[0]
+
+
+class PowerPage(Resource):
+    def render_GET(self):
+        return ''
+
+    def render_POST(self):
+        ApplicationConstants.myLamp.toggle()
+        return ''
+
+
 if __name__ == "__main__":
     log.startLogging(sys.stdout)
 
@@ -81,10 +101,12 @@ if __name__ == "__main__":
     factory = BroadcastServerFactory(u"ws://127.0.0.1:80")
     factory.protocol = BroadcastServerProtocol
     resource = WebSocketResource(factory)
-    # websockets resource on "/ws" path
     root.putChild(u"ws", resource)
 
+    root.putChild(ApplicationConstants.colormessage, ColorPage())
+    root.putChild(ApplicationConstants.powermessage, PowerPage())
+
     site = Site(root)
-    reactor.addSystemEventTrigger('during', 'shutdown', clean)
+    reactor.addSystemEventTrigger('during', 'shutdown', ApplicationConstants.myLamp.destroy)
     reactor.listenTCP(80, site)
     reactor.run()
