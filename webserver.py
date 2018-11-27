@@ -88,7 +88,7 @@ class PowerPage(Resource):
     def render_GET(self):
         return ''
 
-    def render_POST(self):
+    def render_POST(self, request):
         ApplicationConstants.myLamp.toggle()
         return ''
 
