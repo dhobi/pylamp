@@ -32,6 +32,7 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
     def onMessage(self, payload, isBinary):
         data = json.loads(payload)
         value = data['value']
+        print("New message:"+payload)
         if data['message'] == ApplicationConstants.colormessage:
             ApplicationConstants.myLamp.color(value['r'], value['g'], value['b'])
         elif data['message'] == ApplicationConstants.powermessage:
