@@ -1,6 +1,7 @@
 import sys
 import json
 import lamp
+import setinterval
 from twisted.web.static import File
 from twisted.python import log
 from twisted.web.server import Site
@@ -17,6 +18,7 @@ class ApplicationConstants:
     myLamp = lamp.Lamp()
     colormessage = "color"
     powermessage = "power"
+    typemessage = "type"
 
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
@@ -34,6 +36,8 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
             ApplicationConstants.myLamp.color(value['r'], value['g'], value['b'])
         elif data['message'] == ApplicationConstants.powermessage:
             ApplicationConstants.myLamp.toggle()
+        elif data['message'] == ApplicationConstants.typemessage:
+            ApplicationConstants.myLamp.type(value['name'])
 
         self.factory.broadcast('{"isOn":' + str(ApplicationConstants.myLamp.ISRUNNING).lower() + ', "red":' + str(
             ApplicationConstants.myLamp.webRed) + ', "green":' + str(
