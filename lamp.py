@@ -8,6 +8,10 @@ class Lamp:
     pinBlue = 21
     freq = 100
 
+    currentred = 100
+    currentgreen = 100
+    currentblue = 100
+
     webRed = 0
     webGreen = 0
     webBlue = 0
