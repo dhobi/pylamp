@@ -48,6 +48,8 @@ class Lamp:
 
     def destroy(self):
         GPIO.cleanup()
+        if self.timer is not None:
+            self.timer.cancel()
 
     def color(self, red, green, blue):
         self.webRed = red
