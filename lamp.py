@@ -85,7 +85,7 @@ class Lamp:
                 self.timerRed = self.webRed
                 self.timerGreen = self.webGreen
                 self.timerBlue = self.webBlue
-                self.timer = setinterval.SetInterval(0.2, self.blink)
+                self.timer = setinterval.SetInterval(0.02, self.blink)
         else:
             if self.timer is not None:
                 self.timer.cancel()
