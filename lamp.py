@@ -58,14 +58,14 @@ class Lamp:
         self.__colorInternal(red, green, blue)
 
     def __colorInternal(self, red, green, blue):
-        currentred = 100 - red / 2.55
-        currentgreen = 100 - green / 2.55
-        currentblue = 100 - blue / 2.55
+        self.currentred = 100 - red / 2.55
+        self.currentgreen = 100 - green / 2.55
+        self.currentblue = 100 - blue / 2.55
 
         if self.ISRUNNING:
-            self.RED.ChangeDutyCycle(currentred)
-            self.GREEN.ChangeDutyCycle(currentgreen)
-            self.BLUE.ChangeDutyCycle(currentblue)
+            self.RED.ChangeDutyCycle(self.currentred)
+            self.GREEN.ChangeDutyCycle(self.currentgreen)
+            self.BLUE.ChangeDutyCycle(self.currentblue)
 
     def toggle(self):
         if self.ISRUNNING:
