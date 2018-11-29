@@ -92,6 +92,7 @@ class Lamp:
                 self.timer = None
 
     def blink(self):
+        print("blink")
         if self.timerDirection == "up":
             if self.timerRed < self.webRed or self.timerGreen < self.webGreen or self.timerBlue < self.webBlue:
                 if self.timerRed < self.webRed:
