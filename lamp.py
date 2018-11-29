@@ -85,13 +85,18 @@ class Lamp:
                 self.timerRed = self.webRed
                 self.timerGreen = self.webGreen
                 self.timerBlue = self.webBlue
-                self.timer = setinterval.SetInterval(0.002, self.blink)
+                self.timer = setinterval.SetInterval(self.getInterval(), self.blink)
         else:
             if self.timer is not None:
                 self.timer.cancel()
                 self.timer = None
 
+    def getInterval(self):
+        maxAmount = max(self.webRed, self.webGreen, self.webBlue)
+        return 1.275 / maxAmount
+
     def blink(self):
+        self.timer.setInterval(self.getInterval())
         if self.timerDirection == "up":
             if self.timerRed < self.webRed or self.timerGreen < self.webGreen or self.timerBlue < self.webBlue:
                 if self.timerRed < self.webRed:

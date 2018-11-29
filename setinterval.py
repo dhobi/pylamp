@@ -17,3 +17,6 @@ class SetInterval:
 
     def cancel(self):
         self.stopEvent.set()
+
+    def setInterval(self, newInterval):
+        self.interval = newInterval
