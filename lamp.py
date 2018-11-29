@@ -92,7 +92,6 @@ class Lamp:
                 self.timer = None
 
     def blink(self):
-        print("blink")
         if self.timerDirection == "up":
             if self.timerRed < self.webRed or self.timerGreen < self.webGreen or self.timerBlue < self.webBlue:
                 if self.timerRed < self.webRed:
@@ -115,4 +114,5 @@ class Lamp:
             else:
                 print('change blink direction to up')
                 self.timerDirection = "up"
+        print("blink"+str(self.timerRed)+","+str(self.timerGreen)+","+str(self.timerBlue))
         self.__colorInternal(self.timerRed, self.timerGreen, self.timerBlue)
