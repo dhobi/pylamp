@@ -22,6 +22,7 @@ class Lamp:
     timerGreen= 0
     timerBlue = 0
     timerDirection = "down"
+    timerOn = True
     timer = None
 
     def start(self):
@@ -79,13 +80,20 @@ class Lamp:
 
     def type(self, t):
         if t == "blinking":
-            if self.timer is None:
-                print("starting blink")
-                self.timerDirection = "down"
-                self.timerRed = self.webRed
-                self.timerGreen = self.webGreen
-                self.timerBlue = self.webBlue
-                self.timer = setinterval.SetInterval(self.getInterval(), self.blink)
+            if self.timer is not None:
+                self.timer.cancel()
+            self.timerOn = True
+            self.timer = setinterval.SetInterval(1, self.blink)
+            print("Start blinking")
+        elif t == "pulsating":
+            if self.timer is not None:
+                self.timer.cancel()
+            self.timerDirection = "down"
+            self.timerRed = self.webRed
+            self.timerGreen = self.webGreen
+            self.timerBlue = self.webBlue
+            self.timer = setinterval.SetInterval(self.getInterval(), self.pulsate)
+            print("Start pulsating")
         else:
             if self.timer is not None:
                 self.timer.cancel()
@@ -93,9 +101,16 @@ class Lamp:
 
     def getInterval(self):
         maxAmount = max(self.webRed, self.webGreen, self.webBlue)
-        return 1.275 / maxAmount
+        return 1.0 / maxAmount
 
     def blink(self):
+        if self.timerOn:
+            self.__colorInternal(0, 0, 0)
+        else:
+            self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
+        self.timerOn = not self.timerOn
+
+    def pulsate(self):
         self.timer.setInterval(self.getInterval())
         if self.timerDirection == "up":
             if self.timerRed < self.webRed or self.timerGreen < self.webGreen or self.timerBlue < self.webBlue:
@@ -106,7 +121,6 @@ class Lamp:
                 if self.timerBlue < self.webBlue:
                     self.timerBlue = self.timerBlue + 1
             else:
-                print('change blink direction to down')
                 self.timerDirection = "down"
         else:
             if self.timerRed > 0 or self.timerGreen > 0 or self.timerBlue > 0:
@@ -117,6 +131,5 @@ class Lamp:
                 if self.timerBlue > 0:
                     self.timerBlue = self.timerBlue - 1
             else:
-                print('change blink direction to up')
                 self.timerDirection = "up"
         self.__colorInternal(self.timerRed, self.timerGreen, self.timerBlue)

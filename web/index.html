@@ -66,9 +66,8 @@
                 socket.send(JSON.stringify({ message: 'power', value: {} }));
             });
 
-            $('input[type=checkbox]').on('change', function() {
-                var name = $(this).is(':checked') ? 'blinking' : 'normal';
-                socket.send(JSON.stringify({ message: 'type', value: { name: name } }));
+            $('select').on('change', function() {
+                socket.send(JSON.stringify({ message: 'type', value: { name: $(this).val() } }));
             });
         });
 
@@ -127,9 +126,10 @@
             background-color:black;
             color:white;
         }
-        input[type=checkbox] {
+        select {
+            width:200px;
             height: 100px;
-            width: 100px;
+            font-size: 40px;
         }
 
     </style>
@@ -163,7 +163,11 @@
 </div>
 <div id="footer">
     <button class="off">Lamp on</button>
-    <input type="checkbox"/>
+    <select>
+        <option value="off">Off</option>
+        <option value="blinking">Blink</option>
+        <option value="pulsating">Pulsate</option>
+    </select>
 </div>
 </body>
 </html>
