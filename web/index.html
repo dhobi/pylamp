@@ -31,7 +31,7 @@
             var rgbValue = color.toRgb();
             var invertedRgb = 'rgb('+(255-rgbValue.r)+','+(255-rgbValue.g)+','+(255-rgbValue.b)+')';
             $('h1').css('color', color.toHexString())
-                .css('text-shadow', '0 0 10px '+invertedRgb);
+                //.css('text-shadow', '0 0 10px '+invertedRgb);
             $('.potion-color-dark').attr("style", "fill:"+color.toHexString());
             $('.potion-color-light').attr("style", "fill:"+color.lighten(10).toHexString());
             $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString());
@@ -112,7 +112,7 @@
             color: white;
             margin: 0;
             text-align: center;
-            text-shadow: 0 0 10px black;
+            text-shadow: 0 0 5px white;
         }
         body {
             background-color:black;
