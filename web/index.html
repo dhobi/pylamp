@@ -32,9 +32,6 @@
             var invertedRgb = 'rgb('+(255-rgbValue.r)+','+(255-rgbValue.g)+','+(255-rgbValue.b)+')';
             $('h1').css('color', color.toHexString())
                 .css('text-shadow', '0 0 10px '+invertedRgb);
-            $(powerToggleElement).css('background-color', color.toHexString())
-                .css('color', invertedRgb)
-                .css('border-color', invertedRgb);
             $('.potion-color-dark').attr("style", "fill:"+color.toHexString());
             $('.potion-color-light').attr("style", "fill:"+color.lighten(10).toHexString());
             $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString());
@@ -96,30 +93,39 @@
     </script>
     <style>
         @font-face {
-            font-family: MagicFont;
-            src: url(fonts/magic-school.one.ttf);
+            font-family: HangedLetters;
+            src: url(fonts/hanged-letters.ttf);
         }
         h1 {
-            font-family: MagicFont;
+            font-family: HangedLetters;
             font-size: 100px;
             color: white;
             margin: 0;
             text-align: center;
-            text-shadow: 0 0 10px white;
+            text-shadow: 0 0 10px black;
         }
         body {
             background-color:black;
             min-width:550px;
         }
+        #lamp {
+            position: absolute;
+            width: 600px;
+            left:10%;
+            top: 20px;
+            z-index: -1;
+        }
         #content {
             display:flex;
             align-items:center;
             flex-wrap:wrap;
+            justify-content: center;
         }
         #footer {
             margin-top: 30px;
             display:flex;
             align-items:stretch;
+            justify-content: center;
         }
         .sp-container {
             border:none;
@@ -127,7 +133,7 @@
             box-shadow: inset 0 0 10px black;
         }
         .sp-picker-container {
-            width:500px;
+            width:450px;
             border:none;
             margin-bottom: -300px;
         }
@@ -135,12 +141,13 @@
             display:none;
         }
         button {
-            width: 100%;
             height: 100px;
             font-size: 40px;
             border: 1px solid white;
             border-radius: 10px;
             background-color: white;
+            padding-left: 15px;
+            padding-right: 15px;
         }
         button:focus {
             outline:0 !important;
@@ -178,7 +185,21 @@
 <body>
 <h1>PyLamp Potion</h1>
 <div id="content">
-    <div style="min-width:430px">
+    <input type='text' class="basic"/>
+</div>
+<div id="footer">
+    <button class="off">
+        <span class="on-text">Lamp on</span>
+        <span class="off-text">Lamp off</span>
+    </button>
+    <select>
+        <option value="off">Animation off</option>
+        <option value="blinking">Blink</option>
+        <option value="pulsating">Pulsate</option>
+    </select>
+</div>
+
+<div id="lamp">
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
              x="0px" y="0px"
              viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
@@ -200,18 +221,5 @@
             <circle class="potion-color-dark" style="fill:#ffffff;" cx="250.067" cy="228.174" r="16.696"/>
         </svg>
     </div>
-    <input type='text' class="basic"/>
-</div>
-<div id="footer">
-    <button class="off">
-        <span class="on-text">Lamp on</span>
-        <span class="off-text">Lamp off</span>
-    </button>
-    <select>
-        <option value="off">Animation off</option>
-        <option value="blinking">Blink</option>
-        <option value="pulsating">Pulsate</option>
-    </select>
-</div>
 </body>
 </html>
