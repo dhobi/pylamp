@@ -13,13 +13,18 @@
 
     <script>
         var isManipulating = false;
+        var colorElement = 'input[type=text]';
+        var powerToggleElement = 'button';
+        var typeElement = 'select';
+
         function setLamp(isOn, red, green, blue) {
+            var powerToggle = $(powerToggleElement);
             if(isOn) {
-                $('button').removeClass('off');
+                powerToggle.removeClass('off');
             } else {
-                $('button').addClass('off');
+                powerToggle.addClass('off');
             }
-            $(".basic").spectrum("set", 'rgb('+red+','+green+','+blue+')');
+            $(colorElement).spectrum("set", 'rgb('+red+','+green+','+blue+')');
             setPageColor(tinycolor('rgb('+red+','+green+','+blue+')'));
         }
         function setPageColor(color) {
@@ -32,7 +37,7 @@
                     $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString())
         }
 
-        $(function() {
+        function getWebSocket() {
             var socket = new WebSocket("ws://" + location.host + "/ws");
             socket.onopen = function(event) {
               socket.send(JSON.stringify({ message: 'init', value: {}}));
@@ -44,8 +49,11 @@
                 setLamp(message.isOn, message.red, message.green, message.blue);
                }
             }
+            return socket;
+        }
 
-            $(".basic").spectrum({
+        function initColorElement(socket) {
+            $(colorElement).spectrum({
                 flat: true,
                 color: "#fff",
                 move: function(color) {
@@ -53,25 +61,35 @@
                     setPageColor(color);
                 }
             });
-            $(".basic").on("dragstart.spectrum", function(e, color) {
+            $(colorElement).on("dragstart.spectrum", function(e, color) {
                 isManipulating = true;
-            })
+            });
 
-            $(".basic").on("dragstop.spectrum", function(e, color) {
+            $(colorElement).on("dragstop.spectrum", function(e, color) {
                 isManipulating = false;
-            })
+            });
+        }
 
-            $('button').on('click', function() {
+        function initPowerElement(socket) {
+            $(powerToggleElement).on('click', function() {
                 $(this).toggleClass('off');
                 socket.send(JSON.stringify({ message: 'power', value: {} }));
             });
+        }
 
-            $('select').on('change', function() {
+        function initTypeElement(socket) {
+            $(typeElement).on('change', function() {
                 socket.send(JSON.stringify({ message: 'type', value: { name: $(this).val() } }));
             });
+        }
+
+        //start
+        $(function() {
+            var socket = getWebSocket();
+            initColorElement(socket);
+            initPowerElement(socket);
+            initTypeElement(socket);
         });
-
-
     </script>
     <style>
         @font-face {
