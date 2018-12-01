@@ -16,6 +16,7 @@
         var colorElement = 'input[type=text]';
         var powerToggleElement = 'button';
         var typeElement = 'select';
+        var h1Element = 'h1';
 
         function setLamp(isOn, red, green, blue) {
             var powerToggle = $(powerToggleElement);
@@ -30,8 +31,7 @@
         function setPageColor(color) {
             var rgbValue = color.toRgb();
             var invertedRgb = 'rgb('+(255-rgbValue.r)+','+(255-rgbValue.g)+','+(255-rgbValue.b)+')';
-            $('h1').css('color', color.toHexString())
-                //.css('text-shadow', '0 0 10px '+invertedRgb);
+            $(h1Element).css('color', color.toHexString());
             $('.potion-color-dark').attr("style", "fill:"+color.toHexString());
             $('.potion-color-light').attr("style", "fill:"+color.lighten(10).toHexString());
             $('.potion-color-lightest').attr("style", "fill:"+color.lighten(20).toHexString());
@@ -83,6 +83,18 @@
             });
         }
 
+        function initTitleElement() {
+            $(h1Element).on('click', function() {
+                var data = $(h1Element).data('family');
+                if(data.current + 1 === data.families.length) {
+                    data.current = 0;
+                } else {
+                    data.current += 1;
+                }
+                $(h1Element).css('font-family', data.families[data.current]);
+            });
+        }
+
         function sendMessage(socket, message, value) {
             socket.send(JSON.stringify({ message: message, value: value }));
         }
@@ -93,6 +105,7 @@
             initColorElement(socket);
             initPowerElement(socket);
             initTypeElement(socket);
+            initTitleElement();
         });
     </script>
     <style>
@@ -103,10 +116,6 @@
         @font-face {
             font-family: Snowinter;
             src: url(fonts/Snowinter-Free-For-Personal-Use.ttf);
-        }
-        @font-face {
-            font-family: Fuzzy;
-            src: url(fonts/FUZZXL__.TTF);
         }
 
         h1 {
@@ -211,7 +220,7 @@
     </style>
 </head>
 <body>
-<h1>PyLamp Potion</h1>
+<h1 data-family="{&quot;families&quot;: [&quot;HangedLetters&quot;,&quot;Snowinter&quot;], &quot;current&quot;:0}">PyLamp Potion</h1>
 <div id="content">
     <input type='text' class="basic"/>
 </div>
