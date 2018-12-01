@@ -150,10 +150,15 @@
             justify-content: center;
         }
         #footer {
-            margin-top: 30px;
             display:flex;
-            align-items:stretch;
+            align-items:center;
             justify-content: center;
+            flex-direction:column;
+        }
+        #footer > div {
+            margin-top: 15px;
+            display: flex;
+            width: 480px;
         }
         .sp-container {
             border:none;
@@ -178,6 +183,7 @@
             border: 1px solid black;
         }
         button {
+            width:100%;
             height: 100px;
             font-size: 40px;
             border: 1px solid white;
@@ -209,12 +215,25 @@
             border-radius: 10px;
             background-color: black;
             color: white;
-            margin-left: 10px;
             border: 1px solid white;
             padding-left: 15px;
             padding-right: 15px;
+            margin-right: 15px;
+            flex:1;
         }
         select:focus {
+            outline:0 !important;
+        }
+        input[type=number] {
+            font-size: 40px;
+            width: 100px;
+            border-radius:10px;
+            background:black;
+            color:white;
+            border:1px solid white;
+            padding-left: 15px;
+        }
+        input[type=number]:focus {
             outline:0 !important;
         }
     </style>
@@ -225,15 +244,20 @@
     <input type='text' class="basic"/>
 </div>
 <div id="footer">
-    <button class="off">
-        <span class="on-text">Lamp on</span>
-        <span class="off-text">Lamp off</span>
-    </button>
-    <select>
-        <option value="off">Animation off</option>
-        <option value="blinking">Blink</option>
-        <option value="pulsating">Pulsate</option>
-    </select>
+    <div>
+        <select>
+            <option value="off">Animation off</option>
+            <option value="blinking">Blink</option>
+            <option value="pulsating">Pulsate</option>
+        </select>
+        <input type="number" value="1.0" step="0.1" min="0" max="5"/>
+    </div>
+    <div>
+        <button class="off">
+            <span class="on-text">Lamp on</span>
+            <span class="off-text">Lamp off</span>
+        </button>
+    </div>
 </div>
 
 <div id="lamp">
