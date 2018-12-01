@@ -21,6 +21,14 @@ class ApplicationConstants:
     typemessage = "type"
     periodmessage = "period"
 
+    def broadcastLamp(self, factory):
+        factory.broadcast(
+            '{"timerPeriod": ' + str(self.myLamp.timerPeriod) + ',"timerName": "' + str(
+                self.myLamp.timerName) + '","isOn":' + str(
+                self.myLamp.ISRUNNING).lower() + ', "red":' + str(
+                self.myLamp.webRed) + ', "green":' + str(
+                self.myLamp.webGreen) + ', "blue":' + str(self.myLamp.webBlue) + ' }')
+
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
 
@@ -42,10 +50,7 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
             ApplicationConstants.myLamp.type(value['name'])
         elif data['message'] == ApplicationConstants.periodmessage:
             ApplicationConstants.myLamp.period(value['period'])
-
-        self.factory.broadcast('{"timerPeriod": '+str(ApplicationConstants.myLamp.timerPeriod)+',"timerName": "'+str(ApplicationConstants.myLamp.timerName)+'","isOn":' + str(ApplicationConstants.myLamp.ISRUNNING).lower() + ', "red":' + str(
-            ApplicationConstants.myLamp.webRed) + ', "green":' + str(
-            ApplicationConstants.myLamp.webGreen) + ', "blue":' + str(ApplicationConstants.myLamp.webBlue) + ' }')
+        ApplicationConstants.broadcastLamp(self.factory)
 
     def connectionLost(self, reason):
         WebSocketServerProtocol.connectionLost(self, reason)
@@ -80,6 +85,10 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
 
 class ColorPage(Resource):
+    def __init__(self, factory):
+        Resource.__init__(self)
+        self.factory = factory
+
     def render_GET(self):
         return ''
 
@@ -87,17 +96,23 @@ class ColorPage(Resource):
         try:
             data = json.loads(request.content.getvalue())
             ApplicationConstants.myLamp.color(data['r'], data['g'], data['b'])
+            ApplicationConstants.broadcastLamp(self.factory)
             return ''
         except:
             return sys.exc_info()[0]
 
 
 class PowerPage(Resource):
+    def __init__(self, factory):
+        Resource.__init__(self)
+        self.factory = factory
+
     def render_GET(self):
         return ''
 
     def render_POST(self, request):
         ApplicationConstants.myLamp.toggle()
+        ApplicationConstants.broadcastLamp(self.factory)
         return ''
 
 
@@ -112,8 +127,8 @@ if __name__ == "__main__":
     resource = WebSocketResource(factory)
     root.putChild(u"ws", resource)
 
-    root.putChild(ApplicationConstants.colormessage, ColorPage())
-    root.putChild(ApplicationConstants.powermessage, PowerPage())
+    root.putChild(ApplicationConstants.colormessage, ColorPage(factory))
+    root.putChild(ApplicationConstants.powermessage, PowerPage(factory))
 
     site = Site(root)
     reactor.addSystemEventTrigger('during', 'shutdown', ApplicationConstants.myLamp.destroy)
