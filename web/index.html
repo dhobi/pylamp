@@ -16,9 +16,10 @@
         var colorElement = 'input[type=text]';
         var powerToggleElement = 'button';
         var typeElement = 'select';
+        var periodElement = 'input[type=number]';
         var h1Element = 'h1';
 
-        function setLamp(isOn, red, green, blue) {
+        function setLamp(isOn, red, green, blue, timerName, timerPeriod) {
             var powerToggle = $(powerToggleElement);
             if(isOn) {
                 powerToggle.removeClass('off');
@@ -27,6 +28,9 @@
             }
             $(colorElement).spectrum("set", 'rgb('+red+','+green+','+blue+')');
             setPageColor(tinycolor('rgb('+red+','+green+','+blue+')'));
+            $(typeElement).val(timerName);
+            $(periodElement).val(timerPeriod);
+
         }
         function setPageColor(color) {
             var rgbValue = color.toRgb();
@@ -46,7 +50,7 @@
             socket.onmessage = function (event) {
                var message = JSON.parse(event.data);
                if(!isManipulating) {
-                setLamp(message.isOn, message.red, message.green, message.blue);
+                setLamp(message.isOn, message.red, message.green, message.blue, message.timerName, message.timerPeriod);
                }
             }
             return socket;
@@ -83,6 +87,12 @@
             });
         }
 
+        function initPeriodElement(socket) {
+            $(periodElement).on('change', function() {
+                sendMessage(socket, 'period', { period: $(this).val() });
+            });
+        }
+
         function initTitleElement() {
             $(h1Element).on('click', function() {
                 var data = $(h1Element).data('family');
@@ -105,6 +115,7 @@
             initColorElement(socket);
             initPowerElement(socket);
             initTypeElement(socket);
+            initPeriodElement(socket);
             initTitleElement();
         });
     </script>

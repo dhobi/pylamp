@@ -24,6 +24,8 @@ class Lamp:
     timerDirection = "down"
     timerOn = True
     timer = None
+    timerName = ""
+    timerPeriod = 1
 
     def start(self):
         GPIO.setmode(GPIO.BCM)
@@ -83,7 +85,8 @@ class Lamp:
             if self.timer is not None:
                 self.timer.cancel()
             self.timerOn = True
-            self.timer = setinterval.SetInterval(1, self.blink)
+            self.timer = setinterval.SetInterval(self.timerPeriod, self.blink)
+            self.timerName = "blinking"
             print("Start blinking")
         elif t == "pulsating":
             if self.timer is not None:
@@ -93,17 +96,23 @@ class Lamp:
             self.timerGreen = self.webGreen
             self.timerBlue = self.webBlue
             self.timer = setinterval.SetInterval(self.getInterval(), self.pulsate)
+            self.timerName = "pulsating"
             print("Start pulsating")
         else:
             if self.timer is not None:
                 self.timer.cancel()
                 self.timer = None
+            self.timerName = "off"
 
     def getInterval(self):
         maxAmount = max(self.webRed, self.webGreen, self.webBlue)
-        return 1.0 / maxAmount
+        return self.timerPeriod / maxAmount
+
+    def period(self, newperiod):
+        self.timerPeriod = newperiod
 
     def blink(self):
+        self.timer.setInterval(self.timerPeriod)
         if self.timerOn:
             self.__colorInternal(0, 0, 0)
         else:

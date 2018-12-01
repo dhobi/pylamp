@@ -19,6 +19,7 @@ class ApplicationConstants:
     colormessage = "color"
     powermessage = "power"
     typemessage = "type"
+    periodmessage = "period"
 
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
@@ -39,8 +40,10 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
             ApplicationConstants.myLamp.toggle()
         elif data['message'] == ApplicationConstants.typemessage:
             ApplicationConstants.myLamp.type(value['name'])
+        elif data['message'] == ApplicationConstants.periodmessage:
+            ApplicationConstants.myLamp.period(value['period'])
 
-        self.factory.broadcast('{"isOn":' + str(ApplicationConstants.myLamp.ISRUNNING).lower() + ', "red":' + str(
+        self.factory.broadcast('{"timerPeriod": '+str(ApplicationConstants.myLamp.timerPeriod)+',"timerName": "'+str(ApplicationConstants.myLamp.timerName)+'","isOn":' + str(ApplicationConstants.myLamp.ISRUNNING).lower() + ', "red":' + str(
             ApplicationConstants.myLamp.webRed) + ', "green":' + str(
             ApplicationConstants.myLamp.webGreen) + ', "blue":' + str(ApplicationConstants.myLamp.webBlue) + ' }')
 
