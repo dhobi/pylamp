@@ -40,7 +40,7 @@
         function getWebSocket() {
             var socket = new WebSocket("ws://" + location.host + "/ws");
             socket.onopen = function(event) {
-              socket.send(JSON.stringify({ message: 'init', value: {}}));
+              sendMessage(socket, 'init', {});
             };
 
             socket.onmessage = function (event) {
@@ -57,7 +57,7 @@
                 flat: true,
                 color: "#fff",
                 move: function(color) {
-                    socket.send(JSON.stringify({ message: 'color', value: color.toRgb()}));
+                    sendMessage(socket, 'color', color.toRgb());
                     setPageColor(color);
                 }
             });
@@ -73,14 +73,18 @@
         function initPowerElement(socket) {
             $(powerToggleElement).on('click', function() {
                 $(this).toggleClass('off');
-                socket.send(JSON.stringify({ message: 'power', value: {} }));
+                sendMessage(socket, 'power', {});
             });
         }
 
         function initTypeElement(socket) {
             $(typeElement).on('change', function() {
-                socket.send(JSON.stringify({ message: 'type', value: { name: $(this).val() } }));
+                sendMessage(socket, 'type', { name: $(this).val() });
             });
+        }
+
+        function sendMessage(socket, message, value) {
+            socket.send(JSON.stringify({ message: message, value: value }));
         }
 
         //start
