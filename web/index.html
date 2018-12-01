@@ -89,7 +89,7 @@
 
         function initPeriodElement(socket) {
             $(periodElement).on('change', function() {
-                sendMessage(socket, 'period', { period: parseInt($(this).val()) });
+                sendMessage(socket, 'period', { period: parseFloat($(this).val()) });
             });
         }
 
