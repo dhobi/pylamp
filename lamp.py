@@ -24,7 +24,7 @@ class Lamp:
     timerDirection = "down"
     timerOn = True
     timer = None
-    timerName = ""
+    timerName = "off"
     timerPeriod = 1
 
     def start(self):
