@@ -21,13 +21,14 @@ class ApplicationConstants:
     typemessage = "type"
     periodmessage = "period"
 
-    def broadcastLamp(self, factory):
+    @staticmethod
+    def broadcastLamp(factory):
         factory.broadcast(
-            '{"timerPeriod": ' + str(self.myLamp.timerPeriod) + ',"timerName": "' + str(
-                self.myLamp.timerName) + '","isOn":' + str(
-                self.myLamp.ISRUNNING).lower() + ', "red":' + str(
-                self.myLamp.webRed) + ', "green":' + str(
-                self.myLamp.webGreen) + ', "blue":' + str(self.myLamp.webBlue) + ' }')
+            '{"timerPeriod": ' + str(ApplicationConstants.myLamp.timerPeriod) + ',"timerName": "' + str(
+                ApplicationConstants.myLamp.timerName) + '","isOn":' + str(
+                ApplicationConstants.myLamp.ISRUNNING).lower() + ', "red":' + str(
+                ApplicationConstants.myLamp.webRed) + ', "green":' + str(
+                ApplicationConstants.myLamp.webGreen) + ', "blue":' + str(ApplicationConstants.myLamp.webBlue) + ' }')
 
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
