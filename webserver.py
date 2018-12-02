@@ -117,6 +117,21 @@ class PowerPage(Resource):
         return ''
 
 
+class PeriodPage(Resource):
+    def __init__(self, factory):
+        Resource.__init__(self)
+        self.factory = factory
+
+    def render_GET(self):
+        return ''
+
+    def render_POST(self, request):
+        data = json.loads(request.content.getvalue())
+        ApplicationConstants.myLamp.type(data['name'])
+        ApplicationConstants.myLamp.period(data['period'])
+        ApplicationConstants.broadcastLamp(self.factory)
+        return ''
+
 if __name__ == "__main__":
     log.startLogging(sys.stdout)
 
@@ -130,6 +145,7 @@ if __name__ == "__main__":
 
     root.putChild(ApplicationConstants.colormessage, ColorPage(factory))
     root.putChild(ApplicationConstants.powermessage, PowerPage(factory))
+    root.putChild(ApplicationConstants.periodmessage, PeriodPage(factory))
 
     site = Site(root)
     reactor.addSystemEventTrigger('during', 'shutdown', ApplicationConstants.myLamp.destroy)
