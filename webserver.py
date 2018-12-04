@@ -160,6 +160,16 @@ class RemoteControl:
             if self.currentIndex < 0:
                 self.currentIndex = len(self.animationList) - 1
             ApplicationConstants.myLamp.type(self.animationList[self.currentIndex])
+        elif key == "KEY_UP":
+            currentPeriod = ApplicationConstants.myLamp.timerPeriod
+            if currentPeriod < 5.0:
+                currentPeriod = currentPeriod + 0.1
+            ApplicationConstants.myLamp.period(currentPeriod)
+        elif key == "KEY_DOWN":
+            currentPeriod = ApplicationConstants.myLamp.timerPeriod
+            if currentPeriod > 0.1:
+                currentPeriod = currentPeriod - 0.1
+            ApplicationConstants.myLamp.period(currentPeriod)
 
         ApplicationConstants.broadcastLamp(self.factory)
 
