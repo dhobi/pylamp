@@ -133,7 +133,6 @@ class Lamp:
                 if self.timerBlue < self.webBlue:
                     self.timerBlue = self.timerBlue + 1
             else:
-                print("change direction to down")
                 self.timerDirection = "down"
         else:
             if self.timerRed > 0 or self.timerGreen > 0 or self.timerBlue > 0:
@@ -144,6 +143,6 @@ class Lamp:
                 if self.timerBlue > 0:
                     self.timerBlue = self.timerBlue - 1
             else:
-                print("change direction to up")
                 self.timerDirection = "up"
+        print("Color"+str(self.timerRed)+","+str(self.timerGreen)+","+str(self.timerBlue))
         self.__colorInternal(self.timerRed, self.timerGreen, self.timerBlue)
