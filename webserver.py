@@ -182,7 +182,7 @@ if __name__ == "__main__":
     log.startLogging(sys.stdout)
 
     # static file server seving index.html as root
-    root = File("/home/pi/web")
+    root = File("/home/pi/pylamp/web")
 
     factory = BroadcastServerFactory(u"ws://127.0.0.1:80")
     factory.protocol = BroadcastServerProtocol
