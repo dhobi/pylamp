@@ -135,6 +135,9 @@ class PeriodPage(Resource):
 
 
 class RemoteControl:
+    currentIndex = 0
+    animationList = ["off", "blinking", "pulsating"]
+
     def __init__(self, factory):
         self.factory = factory
 
@@ -142,11 +145,22 @@ class RemoteControl:
         if key == "KEY_POWER":
             ApplicationConstants.myLamp.toggle()
         elif key == "KEY_A":
-            ApplicationConstants.myLamp.color(255,0,0)
+            ApplicationConstants.myLamp.color(255, 0, 0)
         elif key == "KEY_B":
-            ApplicationConstants.myLamp.color(0,255,0)
+            ApplicationConstants.myLamp.color(0, 255, 0)
         elif key == "KEY_C":
-            ApplicationConstants.myLamp.color(0,0,255)
+            ApplicationConstants.myLamp.color(0, 0, 255)
+        elif key == "KEY_RIGHT":
+            self.currentIndex = self.currentIndex + 1
+            if self.currentIndex == len(self.animationList):
+                self.currentIndex = 0
+            ApplicationConstants.myLamp.type(self.animationList[self.currentIndex])
+        elif key == "KEY_LEFT":
+            self.currentIndex = self.currentIndex - 1
+            if self.currentIndex < 0:
+                self.currentIndex = len(self.animationList) - 1
+            ApplicationConstants.myLamp.type(self.animationList[self.currentIndex])
+
         ApplicationConstants.broadcastLamp(self.factory)
 
 
