@@ -1,6 +1,7 @@
 import sys
 import json
 import lamp
+import remote
 import setinterval
 from twisted.web.static import File
 from twisted.python import log
@@ -132,8 +133,22 @@ class PeriodPage(Resource):
         ApplicationConstants.broadcastLamp(self.factory)
         return ''
 
+
+def onRemote(key):
+    if key == "KEY_POWER":
+        ApplicationConstants.myLamp.toggle()
+    elif key == "KEY_A":
+        ApplicationConstants.myLamp.color(255,0,0)
+    elif key == "KEY_B":
+        ApplicationConstants.myLamp.color(0,255,0)
+    elif key == "KEY_C":
+        ApplicationConstants.myLamp.color(0,0,255)
+
+
 if __name__ == "__main__":
     log.startLogging(sys.stdout)
+
+    remote.Remote(onRemote)
 
     # static file server seving index.html as root
     root = File("./web")
