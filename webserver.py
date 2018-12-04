@@ -134,21 +134,23 @@ class PeriodPage(Resource):
         return ''
 
 
-def onRemote(key):
-    if key == "KEY_POWER":
-        ApplicationConstants.myLamp.toggle()
-    elif key == "KEY_A":
-        ApplicationConstants.myLamp.color(255,0,0)
-    elif key == "KEY_B":
-        ApplicationConstants.myLamp.color(0,255,0)
-    elif key == "KEY_C":
-        ApplicationConstants.myLamp.color(0,0,255)
+class RemoteControl:
+    def __init__(self, factory):
+        self.factory = factory
 
+    def onRemote(self, key):
+        if key == "KEY_POWER":
+            ApplicationConstants.myLamp.toggle()
+        elif key == "KEY_A":
+            ApplicationConstants.myLamp.color(255,0,0)
+        elif key == "KEY_B":
+            ApplicationConstants.myLamp.color(0,255,0)
+        elif key == "KEY_C":
+            ApplicationConstants.myLamp.color(0,0,255)
+        ApplicationConstants.broadcastLamp(self.factory)
 
 if __name__ == "__main__":
     log.startLogging(sys.stdout)
-
-    remote.Remote(onRemote)
 
     # static file server seving index.html as root
     root = File("./web")
@@ -157,6 +159,9 @@ if __name__ == "__main__":
     factory.protocol = BroadcastServerProtocol
     resource = WebSocketResource(factory)
     root.putChild(u"ws", resource)
+
+    remoteControl = RemoteControl(factory)
+    remote.Remote(remoteControl.onRemote)
 
     root.putChild(ApplicationConstants.colormessage, ColorPage(factory))
     root.putChild(ApplicationConstants.powermessage, PowerPage(factory))

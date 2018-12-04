@@ -1,0 +1,54 @@
+#COPY ME AS .lircrc to /etc/lirc/lircrc/.lircrc
+begin
+    button = KEY_POWER
+    prog = sparkfun
+    config = KEY_POWER
+end
+
+begin
+    button = KEY_A
+    prog = sparkfun
+    config = KEY_A
+end
+
+begin
+    button = KEY_B
+    prog = sparkfun
+    config = KEY_B
+end
+
+begin
+    button = KEY_C
+    prog = sparkfun
+    config = KEY_C
+end
+
+begin
+    button = KEY_UP
+    prog = sparkfun
+    config = KEY_UP
+end
+
+begin
+    button = KEY_DOWN
+    prog = sparkfun
+    config = KEY_DOWN
+end
+
+begin
+    button = KEY_LEFT
+    prog = sparkfun
+    config = KEY_LEFT
+end
+
+begin
+    button = KEY_RIGHT
+    prog = sparkfun
+    config = KEY_RIGHT
+end
+
+begin
+    button = KEY_OK
+    prog = sparkfun
+    config = KEY_OK
+end
