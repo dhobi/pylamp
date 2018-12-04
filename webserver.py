@@ -149,6 +149,11 @@ class RemoteControl:
             ApplicationConstants.myLamp.color(0,0,255)
         ApplicationConstants.broadcastLamp(self.factory)
 
+
+def destroy():
+    ApplicationConstants.myLamp.destroy()
+    remoteDaemon.destroy()
+
 if __name__ == "__main__":
     log.startLogging(sys.stdout)
 
@@ -161,13 +166,13 @@ if __name__ == "__main__":
     root.putChild(u"ws", resource)
 
     remoteControl = RemoteControl(factory)
-    remote.Remote(remoteControl.onRemote)
+    remoteDaemon = remote.Remote(remoteControl.onRemote)
 
     root.putChild(ApplicationConstants.colormessage, ColorPage(factory))
     root.putChild(ApplicationConstants.powermessage, PowerPage(factory))
     root.putChild(ApplicationConstants.periodmessage, PeriodPage(factory))
 
     site = Site(root)
-    reactor.addSystemEventTrigger('during', 'shutdown', ApplicationConstants.myLamp.destroy)
+    reactor.addSystemEventTrigger('during', 'shutdown', destroy)
     reactor.listenTCP(80, site)
     reactor.run()

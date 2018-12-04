@@ -7,15 +7,19 @@ import threading
 
 class Remote:
     onKeyPress = None
+    isRunning = True
     def __init__(self, onKeyPress):
         self.onKeyPress = onKeyPress
-        thread = threading.Thread(target=self.__listen)
-        thread.start()
+        self.thread = threading.Thread(target=self.__listen)
+        self.thread.start()
     def __listen(self):
         sockid = lirc.init("sparkfun", blocking=False)
 
-        while True:
+        while self.isRunning:
             codeIR = lirc.nextcode()
             if codeIR != []:
                 self.onKeyPress(codeIR[0])
                 time.sleep(0.05)
+
+    def destroy(self):
+        self.isRunning = False
