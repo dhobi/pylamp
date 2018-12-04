@@ -16,6 +16,7 @@ class SetInterval:
             self.action()
 
     def cancel(self):
+        print("timer canceled")
         self.stopEvent.set()
 
     def setInterval(self, newInterval):

@@ -109,7 +109,7 @@ class Lamp:
 
     def getInterval(self):
         maxAmount = max(self.webRed, self.webGreen, self.webBlue)
-        return (self.timerPeriod-0.01) / maxAmount
+        return (self.timerPeriod) / maxAmount
 
     def period(self, newperiod):
         self.timerPeriod = newperiod
