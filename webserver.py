@@ -167,7 +167,7 @@ class RemoteControl:
             ApplicationConstants.myLamp.period(currentPeriod)
         elif key == "KEY_DOWN":
             currentPeriod = ApplicationConstants.myLamp.timerPeriod
-            if currentPeriod > 0.1:
+            if currentPeriod > 0.15:
                 currentPeriod = currentPeriod - 0.1
             ApplicationConstants.myLamp.period(currentPeriod)
 
