@@ -144,5 +144,4 @@ class Lamp:
                     self.timerBlue = self.timerBlue - 1
             else:
                 self.timerDirection = "up"
-        print("Color"+str(self.timerRed)+","+str(self.timerGreen)+","+str(self.timerBlue))
         self.__colorInternal(self.timerRed, self.timerGreen, self.timerBlue)
