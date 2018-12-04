@@ -8,11 +8,11 @@ class Lamp:
     pinBlue = 21
     freq = 100
 
-    currentred = 100
+    currentred = 0
     currentgreen = 100
     currentblue = 100
 
-    webRed = 0
+    webRed = 255
     webGreen = 0
     webBlue = 0
 
@@ -26,6 +26,9 @@ class Lamp:
     timer = None
     timerName = "off"
     timerPeriod = 1
+
+    def __init__(self):
+        self.start()
 
     def start(self):
         GPIO.setmode(GPIO.BCM)
