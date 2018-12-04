@@ -1,0 +1,9 @@
+curl --header "Content-Type: application/json" --request POST --data "{\"r\":255,\"g\":0, \"b\":0}" http://192.168.0.31/color
+curl --header "Content-Type: application/json" --request POST --data "{\"r\":255,\"g\":255, \"b\":0}" http://192.168.0.31/color
+curl --header "Content-Type: application/json" --request POST --data "{\"r\":0,\"g\":255, \"b\":0}" http://192.168.0.31/color
+
+curl --header "Content-Type: application/json" --request POST --data "{}" http://192.168.0.31/power
+
+curl --header "Content-Type: application/json" --request POST --data "{\"name\":\"blinking\",\"period\":0.9}" http://192.168.0.31/period
+curl --header "Content-Type: application/json" --request POST --data "{\"name\":\"pulsating\",\"period\":0.9}" http://192.168.0.31/period
+curl --header "Content-Type: application/json" --request POST --data "{\"name\":\"off\",\"period\":0.9}" http://192.168.0.31/period
