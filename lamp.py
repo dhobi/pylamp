@@ -6,7 +6,7 @@ class Lamp:
     pinRed = 16
     pinGreen = 20
     pinBlue = 21
-    freq = 500
+    freq = 1000
 
     currentred = 0
     currentgreen = 100
