@@ -106,6 +106,7 @@ class Lamp:
                 self.timer.cancel()
                 self.timer = None
             self.timerName = "off"
+            self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
 
     def getInterval(self):
         maxAmount = max(self.webRed, self.webGreen, self.webBlue)
