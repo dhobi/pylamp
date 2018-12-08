@@ -24,18 +24,18 @@ class LampHw(pi):
         self.timerBlue = 0
 
         # refresh to set default RGB values
-        self.__refresh()
+        self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
 
-    def __refresh(self):
-        self.set_PWM_dutycycle(self.__r_pin, 255 - self.webRed if self.ISRUNNING else 0)
-        self.set_PWM_dutycycle(self.__g_pin, 255 - self.webGreen if self.ISRUNNING else 0)
-        self.set_PWM_dutycycle(self.__b_pin, 255 - self.webBlue if self.ISRUNNING else 0)
+    def __colorInternal(self, r, g, b):
+        self.set_PWM_dutycycle(self.__r_pin, 255 - r if self.ISRUNNING else 255)
+        self.set_PWM_dutycycle(self.__g_pin, 255 - g if self.ISRUNNING else 255)
+        self.set_PWM_dutycycle(self.__b_pin, 255 - b if self.ISRUNNING else 255)
 
     def color(self, red_value, green_value, blue_value):
         self.webRed = red_value
         self.webGreen = green_value
         self.webBlue = blue_value
-        self.__refresh()
+        self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
 
     def toggle(self):
         if self.ISRUNNING:
@@ -45,11 +45,11 @@ class LampHw(pi):
 
     def turn_on(self):
         self.ISRUNNING = True
-        self.__refresh()
+        self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
 
     def turn_off(self):
         self.ISRUNNING = False
-        self.__refresh()
+        self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
 
     def type(self, t):
         if t == "blinking":
@@ -74,7 +74,7 @@ class LampHw(pi):
                 self.timer.cancel()
                 self.timer = None
             self.timerName = "off"
-            self.color(self.webRed, self.webGreen, self.webBlue)
+            self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
 
     def getInterval(self):
         maxAmount = max(self.webRed, self.webGreen, self.webBlue)
@@ -88,9 +88,9 @@ class LampHw(pi):
     def blink(self):
         self.timer.setInterval(self.timerPeriod)
         if self.timerOn:
-            self.color(0, 0, 0)
+            self.__colorInternal(0, 0, 0)
         else:
-            self.color(self.webRed, self.webGreen, self.webBlue)
+            self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
         self.timerOn = not self.timerOn
 
     def pulsate(self):
@@ -115,7 +115,7 @@ class LampHw(pi):
                     self.timerBlue = self.timerBlue - 1
             else:
                 self.timerDirection = "up"
-        self.color(self.timerRed, self.timerGreen, self.timerBlue)
+        self.__colorInternal(self.timerRed, self.timerGreen, self.timerBlue)
 
     def destroy(self):
         self.turn_off()
