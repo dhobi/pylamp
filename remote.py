@@ -19,7 +19,7 @@ class Remote:
             codeIR = lirc.nextcode()
             if codeIR != []:
                 self.onKeyPress(codeIR[0])
-                time.sleep(0.5)
+            time.sleep(0.1)
 
     def destroy(self):
         self.isRunning = False
