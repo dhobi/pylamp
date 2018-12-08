@@ -13,7 +13,6 @@
 
     <script>
         var isManipulating = false;
-        var isMorse = false;
 
         var colorElement = 'input[type=text]';
         var powerToggleElement = 'button[id=power]';
@@ -25,23 +24,12 @@
         function setLamp(isOn, red, green, blue, timerName, timerPeriod) {
             var powerToggle = $(powerToggleElement);
             var morseToggle = $(morseElement);
-            if(!isMorse) {
-                if(isOn) {
-                    powerToggle.removeClass('off');
-                    $(morseElement).prop("disabled", true);
-                } else {
-                    powerToggle.addClass('off');
-                    $(morseElement).prop("disabled", false);
-                }
+            if(isOn) {
+                powerToggle.removeClass('off');
+                morseToggle.removeClass('off');
             } else {
-                if(isOn) {
-                    morseToggle.removeClass('off');
-                } else {
-                    morseToggle.addClass('off');
-                    if(!isMorseMouseDown) {
-                        isMorse = false;
-                    }
-                }
+                powerToggle.addClass('off');
+                morseToggle.addClass('off');
             }
 
             $(colorElement).spectrum("set", 'rgb('+red+','+green+','+blue+')');
@@ -100,12 +88,9 @@
 
         function initMorseElement(socket) {
             $(morseElement).on('mousedown touchstart', function() {
-                isMorse = true;
-                isMorseMouseDown = true;
                 sendMessage(socket, 'power', {});
             });
             $(morseElement).on('mouseup touchend', function() {
-                isMorseMouseDown = false;
                 sendMessage(socket, 'power', {});
             });
         }
