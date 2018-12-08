@@ -1,6 +1,6 @@
 import sys
 import json
-import lamp
+import lamphw
 import remote
 from twisted.web.static import File
 from twisted.python import log
@@ -15,7 +15,7 @@ from autobahn.twisted.resource import WebSocketResource
 
 
 class ApplicationConstants:
-    myLamp = lamp.Lamp(16, 20, 21, True, 255)
+    myLamp = lamphw.LampHw(16, 20, 21, True, 255)
     colormessage = "color"
     powermessage = "power"
     typemessage = "type"
