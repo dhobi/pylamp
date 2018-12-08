@@ -13,13 +13,13 @@ class Remote:
         self.thread = threading.Thread(target=self.__listen)
         self.thread.start()
     def __listen(self):
-        sockid = lirc.init("sparkfun", blocking=True)
+        sockid = lirc.init("sparkfun", blocking=False)
 
         while self.isRunning:
             codeIR = lirc.nextcode()
             if codeIR != []:
                 self.onKeyPress(codeIR[0])
-                time.sleep(0.1)
+                time.sleep(0.5)
 
     def destroy(self):
         self.isRunning = False
