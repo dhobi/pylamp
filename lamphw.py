@@ -78,6 +78,8 @@ class LampHw(pi):
 
     def getInterval(self):
         maxAmount = max(self.webRed, self.webGreen, self.webBlue)
+        if maxAmount == 0:
+            maxAmount = 1
         return float(self.timerPeriod) / float(maxAmount)
 
     def period(self, newperiod):
