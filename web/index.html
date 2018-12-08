@@ -38,6 +38,9 @@
                     morseToggle.removeClass('off');
                 } else {
                     morseToggle.addClass('off');
+                    if(!isMorseMouseDown) {
+                        isMorse = false;
+                    }
                 }
             }
 
@@ -98,11 +101,12 @@
         function initMorseElement(socket) {
             $(morseElement).on('mousedown touchstart', function() {
                 isMorse = true;
+                isMorseMouseDown = true;
                 sendMessage(socket, 'power', {});
             });
             $(morseElement).on('mouseup touchend', function() {
+                isMorseMouseDown = false;
                 sendMessage(socket, 'power', {});
-                isMorse = false;
             });
         }
 
