@@ -8,7 +8,7 @@ class LampHw(pi):
         self.__g_pin = green_pin
         self.__b_pin = blue_pin
         # store on state
-        self.__on = on
+        self.ISRUNNING = on
         # store RGB values
         self.__r = red_value
         self.__g = green_value
@@ -27,9 +27,9 @@ class LampHw(pi):
         self.__refresh()
 
     def __refresh(self):
-        self.set_PWM_dutycycle(self.__r_pin, self.__r if self.__on else 0)
-        self.set_PWM_dutycycle(self.__g_pin, self.__g if self.__on else 0)
-        self.set_PWM_dutycycle(self.__b_pin, self.__b if self.__on else 0)
+        self.set_PWM_dutycycle(self.__r_pin, self.__r if self.ISRUNNING else 0)
+        self.set_PWM_dutycycle(self.__g_pin, self.__g if self.ISRUNNING else 0)
+        self.set_PWM_dutycycle(self.__b_pin, self.__b if self.ISRUNNING else 0)
 
     def color(self, red_value, green_value, blue_value):
         self.__r = red_value
@@ -38,17 +38,17 @@ class LampHw(pi):
         self.__refresh()
 
     def toggle(self):
-        if self.__on:
+        if self.ISRUNNING:
             self.turn_off()
         else:
             self.turn_on()
 
     def turn_on(self):
-        self.__on = True
+        self.ISRUNNING = True
         self.__refresh()
 
     def turn_off(self):
-        self.__on = False
+        self.ISRUNNING = False
         self.__refresh()
 
     def type(self, t):
