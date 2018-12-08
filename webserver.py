@@ -189,7 +189,7 @@ if __name__ == "__main__":
     root.putChild(u"ws", resource)
 
     remoteControl = RemoteControl(factory)
-    remoteDaemon = remote.Remote(remoteControl.onRemote)
+    #remoteDaemon = remote.Remote(remoteControl.onRemote)
 
     root.putChild(ApplicationConstants.colormessage, ColorPage(factory))
     root.putChild(ApplicationConstants.powermessage, PowerPage(factory))
