@@ -13,7 +13,7 @@ class Remote:
         self.thread = threading.Thread(target=self.__listen)
         self.thread.start()
     def __listen(self):
-        sockid = lirc.init("sparkfun", blocking=False)
+        sockid = lirc.init("sparkfun", blocking=True)
 
         while self.isRunning:
             codeIR = lirc.nextcode()
