@@ -24,17 +24,23 @@
 
         function setLamp(isOn, red, green, blue, timerName, timerPeriod) {
             var powerToggle = $(powerToggleElement);
-            if(isOn) {
-                powerToggle.removeClass('off');
-                if(!isMorse) {
+            var morseToggle = $(morseElement);
+            if(!isMorse) {
+                if(isOn) {
+                    powerToggle.removeClass('off');
                     $(morseElement).prop("disabled", true);
-                }
-            } else {
-                powerToggle.addClass('off');
-                if(!isMorse) {
+                } else {
+                    powerToggle.addClass('off');
                     $(morseElement).prop("disabled", false);
                 }
+            } else {
+                if(isOn) {
+                    morseToggle.removeClass('off');
+                } else {
+                    morseToggle.addClass('off');
+                }
             }
+
             $(colorElement).spectrum("set", 'rgb('+red+','+green+','+blue+')');
             setPageColor(tinycolor('rgb('+red+','+green+','+blue+')'));
             $(typeElement).val(timerName);
@@ -92,11 +98,9 @@
         function initMorseElement(socket) {
             $(morseElement).on('mousedown touchstart', function() {
                 isMorse = true;
-                $(this).toggleClass('off');
                 sendMessage(socket, 'power', {});
             });
             $(morseElement).on('mouseup touchend', function() {
-                $(this).toggleClass('off');
                 sendMessage(socket, 'power', {});
                 isMorse = false;
             });
