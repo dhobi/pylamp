@@ -13,18 +13,24 @@
 
     <script>
         var isManipulating = false;
+        var isPowerOn = true;
+
         var colorElement = 'input[type=text]';
-        var powerToggleElement = 'button';
+        var powerToggleElement = 'button[id=power]';
+        var morseElement = 'button[id=morse]';
         var typeElement = 'select';
         var periodElement = 'input[type=number]';
         var h1Element = 'h1';
 
         function setLamp(isOn, red, green, blue, timerName, timerPeriod) {
             var powerToggle = $(powerToggleElement);
-            if(isOn) {
+            isPowerOn = isOn;
+            if(isPowerOn) {
                 powerToggle.removeClass('off');
+                $(morseElement).prop("disabled", true);
             } else {
                 powerToggle.addClass('off');
+                $(morseElement).prop("disabled", false);
             }
             $(colorElement).spectrum("set", 'rgb('+red+','+green+','+blue+')');
             setPageColor(tinycolor('rgb('+red+','+green+','+blue+')'));
@@ -76,6 +82,16 @@
 
         function initPowerElement(socket) {
             $(powerToggleElement).on('click', function() {
+                sendMessage(socket, 'power', {});
+            });
+        }
+
+        function initMorseElement(socket) {
+            $(morseElement).on('mousedown touchstart', function() {
+                $(this).toggleClass('off');
+                sendMessage(socket, 'power', {});
+            });
+            $(morseElement).on('mouseup touchend', function() {
                 $(this).toggleClass('off');
                 sendMessage(socket, 'power', {});
             });
@@ -114,6 +130,7 @@
             var socket = getWebSocket();
             initColorElement(socket);
             initPowerElement(socket);
+            initMorseElement(socket);
             initTypeElement(socket);
             initPeriodElement(socket);
             initTitleElement();
@@ -195,6 +212,7 @@
         }
         button {
             width:100%;
+            flex:1;
             height: 100px;
             font-size: 40px;
             border: 1px solid white;
@@ -219,6 +237,15 @@
         }
         button.off > .off-text {
             display:inline;
+        }
+        button#power {
+            flex:2;
+            margin-right: 15px;
+        }
+        button:disabled {
+            background-color: #777777 !important;
+            color: #8e8d8d !important;
+            border-color: #8d8d8d !important;
         }
         select {
             height: 100px;
@@ -264,9 +291,13 @@
         <input type="number" value="1.0" step="0.1" min="0" max="5"/>
     </div>
     <div>
-        <button class="off">
+        <button id="power" class="off">
             <span class="on-text">Lamp on</span>
             <span class="off-text">Lamp off</span>
+        </button>
+        <button id="morse" class="off">
+            <span class="on-text">Dit</span>
+            <span class="off-text">Morse</span>
         </button>
     </div>
 </div>
