@@ -74,7 +74,7 @@ class LampHw(pi):
                 self.timer.cancel()
                 self.timer = None
             self.timerName = "off"
-            self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
+            self.color(self.webRed, self.webGreen, self.webBlue)
 
     def getInterval(self):
         maxAmount = max(self.webRed, self.webGreen, self.webBlue)
@@ -86,9 +86,9 @@ class LampHw(pi):
     def blink(self):
         self.timer.setInterval(self.timerPeriod)
         if self.timerOn:
-            self.__colorInternal(0, 0, 0)
+            self.color(0, 0, 0)
         else:
-            self.__colorInternal(self.webRed, self.webGreen, self.webBlue)
+            self.color(self.webRed, self.webGreen, self.webBlue)
         self.timerOn = not self.timerOn
 
     def pulsate(self):

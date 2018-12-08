@@ -3,9 +3,6 @@ import setinterval
 
 
 class Lamp:
-    pinRed = 16
-    pinGreen = 20
-    pinBlue = 21
     freq = 200
 
     currentred = 0
@@ -27,8 +24,12 @@ class Lamp:
     timerName = "off"
     timerPeriod = 1
 
-    def __init__(self):
+    def __init__(self, pinRed, pinGreen, pinBlue, isOn = True, red = 0, green = 0, blue = 0):
+        self.pinRed = pinRed
+        self.pinGreen = pinGreen
+        self.pinBlue = pinBlue
         self.start()
+        self.color(red, green, blue)
 
     def start(self):
         GPIO.setmode(GPIO.BCM)
