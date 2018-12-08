@@ -27,9 +27,9 @@ class LampHw(pi):
         self.__refresh()
 
     def __refresh(self):
-        self.set_PWM_dutycycle(self.__r_pin, self.webRed if self.ISRUNNING else 0)
-        self.set_PWM_dutycycle(self.__g_pin, self.webGreen if self.ISRUNNING else 0)
-        self.set_PWM_dutycycle(self.__b_pin, self.webBlue if self.ISRUNNING else 0)
+        self.set_PWM_dutycycle(self.__r_pin, 255 - self.webRed if self.ISRUNNING else 0)
+        self.set_PWM_dutycycle(self.__g_pin, 255 - self.webGreen if self.ISRUNNING else 0)
+        self.set_PWM_dutycycle(self.__b_pin, 255 - self.webBlue if self.ISRUNNING else 0)
 
     def color(self, red_value, green_value, blue_value):
         self.webRed = red_value
