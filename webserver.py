@@ -151,6 +151,7 @@ class RgbPage(Resource):
             ApplicationConstants.myLamp.color(rgb[0], rgb[1], rgb[2])
             ApplicationConstants.broadcastLamp(self.factory)
             return ''
+        return '000000'
 
     def render_POST(self, request):
         return ''
