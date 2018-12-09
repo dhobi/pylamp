@@ -20,6 +20,7 @@ class ApplicationConstants:
     powermessage = "power"
     typemessage = "type"
     periodmessage = "period"
+    rgbmessage = "rgb"
 
     @staticmethod
     def broadcastLamp(factory):
@@ -133,6 +134,27 @@ class PeriodPage(Resource):
         return ''
 
 
+class RgbPage(Resource):
+    def __init__(self, factory):
+        Resource.__init__(self)
+        self.factory = factory
+
+    def render_GET(self, request):
+        if request['format'] != '':
+            hexRed = "%x" % ApplicationConstants.myLamp.webRed
+            hexGreen = "%x" % ApplicationConstants.myLamp.webGreen
+            hexBlue = "%x" % ApplicationConstants.myLamp.webBlue
+            return hexRed+hexGreen+hexBlue
+        if request['color'] != '':
+            hexColor = request['color']
+            rgb = tuple(int(hexColor[i:i+2], 16) for i in (0, 2 ,4))
+            ApplicationConstants.myLamp.color(rgb[0], rgb[1], rgb[2])
+            ApplicationConstants.broadcastLamp(self.factory)
+            return ''
+
+    def render_POST(self, request):
+        return ''
+
 class RemoteControl:
     currentIndex = 0
     animationList = ["off", "blinking", "pulsating"]
@@ -195,6 +217,7 @@ if __name__ == "__main__":
     root.putChild(ApplicationConstants.colormessage, ColorPage(factory))
     root.putChild(ApplicationConstants.powermessage, PowerPage(factory))
     root.putChild(ApplicationConstants.periodmessage, PeriodPage(factory))
+    root.putChild(ApplicationConstants.rgbmessage, RgbPage(factory))
 
     site = Site(root)
     reactor.addSystemEventTrigger('during', 'shutdown', destroy)
