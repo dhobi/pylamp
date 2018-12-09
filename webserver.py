@@ -147,6 +147,7 @@ class RgbPage(Resource):
             return hexRed+hexGreen+hexBlue
         if 'color' in request.args:
             hexColor = str(request.args['color'])
+            print("Received: "+hexColor)
             rgb = tuple(int(hexColor[i:i+2], 16) for i in (0, 2 ,4))
             ApplicationConstants.myLamp.color(rgb[0], rgb[1], rgb[2])
             ApplicationConstants.broadcastLamp(self.factory)
