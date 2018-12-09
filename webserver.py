@@ -140,13 +140,13 @@ class RgbPage(Resource):
         self.factory = factory
 
     def render_GET(self, request):
-        if request['format'] != '':
+        if request.args['format'] != '':
             hexRed = "%x" % ApplicationConstants.myLamp.webRed
             hexGreen = "%x" % ApplicationConstants.myLamp.webGreen
             hexBlue = "%x" % ApplicationConstants.myLamp.webBlue
             return hexRed+hexGreen+hexBlue
-        if request['color'] != '':
-            hexColor = request['color']
+        if request.args['color'] != '':
+            hexColor = request.args['color']
             rgb = tuple(int(hexColor[i:i+2], 16) for i in (0, 2 ,4))
             ApplicationConstants.myLamp.color(rgb[0], rgb[1], rgb[2])
             ApplicationConstants.broadcastLamp(self.factory)
