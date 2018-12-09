@@ -144,6 +144,8 @@ class RgbPage(Resource):
             hexRed = "%x" % ApplicationConstants.myLamp.webRed
             hexGreen = "%x" % ApplicationConstants.myLamp.webGreen
             hexBlue = "%x" % ApplicationConstants.myLamp.webBlue
+            print("hexRed:"+hexRed)
+            print("hexGreen:"+hexGreen)
             print("hexblue:"+hexBlue)
             return hexRed+hexGreen+hexBlue
         if 'color' in request.args:
