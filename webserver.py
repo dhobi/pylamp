@@ -141,9 +141,9 @@ class RgbPage(Resource):
 
     def render_GET(self, request):
         if 'format' in request.args:
-            hexRed = "%x" % ApplicationConstants.myLamp.webRed
-            hexGreen = "%x" % ApplicationConstants.myLamp.webGreen
-            hexBlue = "%x" % ApplicationConstants.myLamp.webBlue
+            hexRed = "%0.2X" % ApplicationConstants.myLamp.webRed
+            hexGreen = "%0.2X" % ApplicationConstants.myLamp.webGreen
+            hexBlue = "%0.2X" % ApplicationConstants.myLamp.webBlue
             print("hexRed:"+hexRed)
             print("hexGreen:"+hexGreen)
             print("hexblue:"+hexBlue)
