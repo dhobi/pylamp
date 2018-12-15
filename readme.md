@@ -8,6 +8,8 @@ Small hobby project with the aim to control a
  - Web interface / REST
  - Homekit
  
+ ...because the lamp was not geeky enough.
+ 
 You will not find a How-To or other install instructions here. Just sample code and sample config files.
 Take over what you need, have fun.
 
