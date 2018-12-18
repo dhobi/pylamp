@@ -144,7 +144,6 @@ class LampHw(pi):
             if self.timerChannels[previousChannel] == 0:
                 self.timerDirection = "up"
         self.__colorInternal(self.timerChannels[0], self.timerChannels[1], self.timerChannels[2])
-        print(str(self.timerChannels[0]) + "," + str(self.timerChannels[1]) + "," + str(self.timerChannels[2]))
 
     def getNextChannel(self):
         nextChannel = self.timerChannelCurrent + 1
