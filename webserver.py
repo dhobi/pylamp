@@ -161,7 +161,7 @@ class RgbPage(Resource):
 
 class RemoteControl:
     currentIndex = 0
-    animationList = ["off", "blinking", "pulsating"]
+    animationList = ["off", "blinking", "pulsating", "rainbow"]
 
     def __init__(self, factory):
         self.factory = factory

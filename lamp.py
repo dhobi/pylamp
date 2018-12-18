@@ -23,6 +23,8 @@ class Lamp:
     timer = None
     timerName = "off"
     timerPeriod = 1
+    timerChannelCurrent = 0
+    timerChannels = [255, 0, 0]
 
     def __init__(self, pinRed, pinGreen, pinBlue, isOn = True, red = 0, green = 0, blue = 0):
         self.pinRed = pinRed
@@ -102,6 +104,15 @@ class Lamp:
             self.timer = setinterval.SetInterval(self.getInterval(), self.pulsate)
             self.timerName = "pulsating"
             print("Start pulsating")
+        elif t == "rainbow":
+            if self.timer is not None:
+                self.timer.cancel()
+            self.timerChannelCurrent = 0
+            self.timerChannels = [255,0,0]
+            self.timerDirection = "up"
+            self.timer = setinterval.SetInterval(float(self.timerPeriod) / float(255), self.rainbow)
+            self.timerName = "rainbow"
+            print("Start rainbow")
         else:
             if self.timer is not None:
                 self.timer.cancel()
@@ -147,3 +158,39 @@ class Lamp:
             else:
                 self.timerDirection = "up"
         self.__colorInternal(self.timerRed, self.timerGreen, self.timerBlue)
+
+    def rainbow(self):
+        self.timer.setInterval(float(self.timerPeriod) / float(255))
+        if self.timerDirection == "up":
+            nextChannel = self.getNextChannel()
+            self.timerChannels[nextChannel] += 1
+            if self.timerChannels[nextChannel] == 255:
+                self.timerDirection = "down"
+                self.timerChannelCurrent += 1
+                if self.timerChannelCurrent == len(self.timerChannels):
+                    self.timerChannelCurrent = 0
+        else:
+            previousChannel = self.getPreviousChannel()
+            self.timerChannels[previousChannel] -= 1
+            if self.timerChannels[previousChannel] == 0:
+                self.timerDirection = "up"
+                self.timerChannelCurrent += 1
+                if self.timerChannelCurrent == len(self.timerChannels):
+                    self.timerChannelCurrent = 0
+        self.__colorInternal(self.timerChannels[0], self.timerChannels[1], self.timerChannels[2])
+
+    def getNextChannel(self):
+        nextChannel = self.timerChannelCurrent + 1
+        if nextChannel >= 0 & nextChannel < len(self.timerChannels):
+            """all good"""
+        else:
+            nextChannel = 0
+        return nextChannel
+
+    def getPreviousChannel(self):
+        prevChannel = self.timerChannelCurrent - 1
+        if prevChannel >= 0 & prevChannel < len(self.timerChannels):
+            """all good"""
+        else:
+            prevChannel = len(self.timerChannels) - 1
+        return prevChannel
