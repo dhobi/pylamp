@@ -164,4 +164,7 @@ class LampHw(pi):
         return prevChannel
 
     def destroy(self):
+        if self.timer is not None:
+            self.timer.cancel()
+            self.timer = None
         self.turn_off()
