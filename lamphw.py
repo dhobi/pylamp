@@ -150,7 +150,7 @@ class LampHw(pi):
 
     def getNextChannel(self):
         nextChannel = self.timerChannelCurrent + 1
-        if nextChannel >= 0 & nextChannel < len(self.timerChannels):
+        if 0 <= nextChannel < len(self.timerChannels):
             """all good"""
         else:
             nextChannel = 0
@@ -158,7 +158,7 @@ class LampHw(pi):
 
     def getPreviousChannel(self):
         prevChannel = self.timerChannelCurrent - 1
-        if prevChannel >= 0 & prevChannel < len(self.timerChannels):
+        if 0 <= prevChannel < len(self.timerChannels):
             """all good"""
         else:
             prevChannel = len(self.timerChannels) - 1
