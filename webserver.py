@@ -9,7 +9,9 @@ from twisted.internet import reactor
 from twisted.web.resource import Resource
 
 from autobahn.twisted.websocket import WebSocketServerFactory, \
-    WebSocketServerProtocol
+    WebSocketServerProtocol, \
+	WebSocketClientProtocol, \
+	WebSocketClientFactory
 
 from autobahn.twisted.resource import WebSocketResource
 
@@ -31,6 +33,17 @@ class ApplicationConstants:
                 ApplicationConstants.myLamp.webRed) + ', "green":' + str(
                 ApplicationConstants.myLamp.webGreen) + ', "blue":' + str(ApplicationConstants.myLamp.webBlue) + ' }')
 
+	@staticmethod
+	def setFromJson(data):
+		value = data['value']
+		if data['message'] == ApplicationConstants.colormessage:
+            ApplicationConstants.myLamp.color(value['r'], value['g'], value['b'])
+        elif data['message'] == ApplicationConstants.powermessage:
+            ApplicationConstants.myLamp.toggle()
+        elif data['message'] == ApplicationConstants.typemessage:
+            ApplicationConstants.myLamp.type(value['name'])
+        elif data['message'] == ApplicationConstants.periodmessage:
+            ApplicationConstants.myLamp.period(value['period'])
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
 
@@ -42,16 +55,8 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
 
     def onMessage(self, payload, isBinary):
         data = json.loads(payload)
-        value = data['value']
         print("New message:" + payload)
-        if data['message'] == ApplicationConstants.colormessage:
-            ApplicationConstants.myLamp.color(value['r'], value['g'], value['b'])
-        elif data['message'] == ApplicationConstants.powermessage:
-            ApplicationConstants.myLamp.toggle()
-        elif data['message'] == ApplicationConstants.typemessage:
-            ApplicationConstants.myLamp.type(value['name'])
-        elif data['message'] == ApplicationConstants.periodmessage:
-            ApplicationConstants.myLamp.period(value['period'])
+        ApplicationConstants.setFromJson(data)
         ApplicationConstants.broadcastLamp(self.factory)
 
     def connectionLost(self, reason):
@@ -198,11 +203,16 @@ class RemoteControl:
 
         ApplicationConstants.broadcastLamp(self.factory)
 
-
+class MyClientProtocol(WebSocketClientProtocol):
+	def onMessage(self, payload, isBinary):
+		print("New message from websocket.in:" + payload)
+		data = json.loads(payload)
+		ApplicationConstants.setFromJson(data)
+		ApplicationConstants.broadcastLamp(self.factory)       
+		
 def destroy():
     ApplicationConstants.myLamp.destroy()
     remoteDaemon.destroy()
-
 
 if __name__ == "__main__":
     log.startLogging(sys.stdout)
@@ -224,6 +234,11 @@ if __name__ == "__main__":
     root.putChild(ApplicationConstants.rgbmessage, RgbPage(factory))
 
     site = Site(root)
+	
+	factory = WebSocketClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
+	factory.protocol = MyClientProtocol
+	reactor.connectTCP("connect.websocket.in", 80, factory)
+	
     reactor.addSystemEventTrigger('during', 'shutdown', destroy)
     reactor.listenTCP(80, site)
     reactor.run()
