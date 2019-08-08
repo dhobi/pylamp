@@ -214,8 +214,8 @@ class MyClientProtocol(WebSocketClientProtocol):
             data = json.loads(payload)
             ApplicationConstants.setFromJson(data)
             ApplicationConstants.broadcastLamp(self.factory)
-        except:
-            print("Failed to parse:" + payload)
+        except BaseException as e:
+            print("Failed to parse:" + payload + " because " + str(e))
 
 def destroy():
     ApplicationConstants.myLamp.destroy()
