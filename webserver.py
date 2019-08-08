@@ -206,6 +206,7 @@ class RemoteControl:
 
 class MyClientProtocol(WebSocketClientProtocol):
     def __init__(self, factory):
+        WebSocketClientProtocol.__init__(self)
         self.factory = factory
     def onMessage(self, payload, isBinary):
         print("New message from websocket.in:" + payload)
