@@ -33,10 +33,10 @@ class ApplicationConstants:
                 ApplicationConstants.myLamp.webRed) + ', "green":' + str(
                 ApplicationConstants.myLamp.webGreen) + ', "blue":' + str(ApplicationConstants.myLamp.webBlue) + ' }')
 
-	@staticmethod
-	def setFromJson(data):
-		value = data['value']
-		if data['message'] == ApplicationConstants.colormessage:
+    @staticmethod
+    def setFromJson(data):
+        value = data['value']
+        if data['message'] == ApplicationConstants.colormessage:
             ApplicationConstants.myLamp.color(value['r'], value['g'], value['b'])
         elif data['message'] == ApplicationConstants.powermessage:
             ApplicationConstants.myLamp.toggle()
@@ -204,12 +204,12 @@ class RemoteControl:
         ApplicationConstants.broadcastLamp(self.factory)
 
 class MyClientProtocol(WebSocketClientProtocol):
-	def onMessage(self, payload, isBinary):
-		print("New message from websocket.in:" + payload)
-		data = json.loads(payload)
-		ApplicationConstants.setFromJson(data)
-		ApplicationConstants.broadcastLamp(self.factory)       
-		
+    def onMessage(self, payload, isBinary):
+        print("New message from websocket.in:" + payload)
+        data = json.loads(payload)
+        ApplicationConstants.setFromJson(data)
+        ApplicationConstants.broadcastLamp(self.factory)       
+
 def destroy():
     ApplicationConstants.myLamp.destroy()
     remoteDaemon.destroy()
@@ -234,11 +234,11 @@ if __name__ == "__main__":
     root.putChild(ApplicationConstants.rgbmessage, RgbPage(factory))
 
     site = Site(root)
-	
-	factory = WebSocketClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
-	factory.protocol = MyClientProtocol
-	reactor.connectTCP("connect.websocket.in", 80, factory)
-	
+    
+    factory = WebSocketClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
+    factory.protocol = MyClientProtocol
+    reactor.connectTCP("connect.websocket.in", 80, factory)
+    
     reactor.addSystemEventTrigger('during', 'shutdown', destroy)
     reactor.listenTCP(80, site)
     reactor.run()
