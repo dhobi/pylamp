@@ -207,8 +207,11 @@ class RemoteControl:
 class MyClientProtocol(WebSocketClientProtocol):
     def onMessage(self, payload, isBinary):
         print("New message from websocket.in:" + payload)
-        data = json.loads(payload)
-        ApplicationConstants.setFromJson(data)
+        try:
+            data = json.loads(payload)
+            ApplicationConstants.setFromJson(data)
+        except:
+            print("Failed to parse:" + payload)
 
 def destroy():
     ApplicationConstants.myLamp.destroy()
