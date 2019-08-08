@@ -209,7 +209,6 @@ class MyClientProtocol(WebSocketClientProtocol):
         print("New message from websocket.in:" + payload)
         data = json.loads(payload)
         ApplicationConstants.setFromJson(data)
-        ApplicationConstants.broadcastLamp(self.factory)       
 
 def destroy():
     ApplicationConstants.myLamp.destroy()
