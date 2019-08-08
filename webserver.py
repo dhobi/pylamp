@@ -11,7 +11,8 @@ from twisted.web.resource import Resource
 from autobahn.twisted.websocket import WebSocketServerFactory, \
     WebSocketServerProtocol, \
 	WebSocketClientProtocol, \
-	WebSocketClientFactory
+	WebSocketClientFactory, \
+	connectWS
 
 from autobahn.twisted.resource import WebSocketResource
 
@@ -237,7 +238,7 @@ if __name__ == "__main__":
     
     factory = WebSocketClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
     factory.protocol = MyClientProtocol
-    reactor.connectTCP("connect.websocket.in", 80, factory)
+    connectWS(factory)
     
     reactor.addSystemEventTrigger('during', 'shutdown', destroy)
     reactor.listenTCP(80, site)
