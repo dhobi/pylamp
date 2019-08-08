@@ -205,11 +205,14 @@ class RemoteControl:
         ApplicationConstants.broadcastLamp(self.factory)
 
 class MyClientProtocol(WebSocketClientProtocol):
+    def __init__(self, factory):
+        self.factory = factory
     def onMessage(self, payload, isBinary):
         print("New message from websocket.in:" + payload)
         try:
             data = json.loads(payload)
             ApplicationConstants.setFromJson(data)
+            ApplicationConstants.broadcastLamp(self.factory)
         except:
             print("Failed to parse:" + payload)
 
@@ -238,9 +241,9 @@ if __name__ == "__main__":
 
     site = Site(root)
     
-    factory = WebSocketClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
-    factory.protocol = MyClientProtocol
-    connectWS(factory)
+    factoryClient = WebSocketClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
+    factoryClient.protocol = lambda: MyClientProtocol(factory)
+    connectWS(factoryClient)
     
     reactor.addSystemEventTrigger('during', 'shutdown', destroy)
     reactor.listenTCP(80, site)
