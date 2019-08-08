@@ -207,13 +207,13 @@ class RemoteControl:
 class MyClientProtocol(WebSocketClientProtocol):
     def __init__(self, factory):
         WebSocketClientProtocol.__init__(self)
-        self.factory = factory
+        self.serverFactory = factory
     def onMessage(self, payload, isBinary):
         print("New message from websocket.in:" + payload)
         try:
             data = json.loads(payload)
             ApplicationConstants.setFromJson(data)
-            ApplicationConstants.broadcastLamp(self.factory)
+            ApplicationConstants.broadcastLamp(self.serverFactory)
         except BaseException as e:
             print("Failed to parse:" + payload + " because " + str(e))
 
