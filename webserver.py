@@ -212,8 +212,25 @@ class MyClientProtocol(WebSocketClientProtocol):
         print("New message from websocket.in:" + payload)
         try:
             data = json.loads(payload)
-            ApplicationConstants.setFromJson(data)
-            ApplicationConstants.broadcastLamp(self.serverFactory)
+
+            if 'message' in data:
+                ApplicationConstants.setFromJson(data)
+                ApplicationConstants.broadcastLamp(self.serverFactory)
+            else:
+                ApplicationConstants.myLamp.period(0.5)
+                if data['status'] == 'SUCCESS':
+                    ApplicationConstants.myLamp.color(0, 255, 0)
+                elif data['status'] == 'UNSTABLE':
+                    ApplicationConstants.myLamp.color(255, 255, 0)
+                elif data['status'] == 'ABORTED':
+                    ApplicationConstants.myLamp.color(0, 0, 255)
+                else:
+                    ApplicationConstants.myLamp.color(255, 0, 0)
+                if data['isBuilding']:
+                    ApplicationConstants.myLamp.type('off')
+                else:
+                    ApplicationConstants.myLamp.type('pulsating')
+                ApplicationConstants.broadcastLamp(self.factory)
         except BaseException as e:
             print("Failed to parse:" + payload + " because " + str(e))
 
