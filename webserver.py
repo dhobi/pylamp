@@ -230,7 +230,7 @@ class MyClientProtocol(WebSocketClientProtocol):
                     ApplicationConstants.myLamp.type('off')
                 else:
                     ApplicationConstants.myLamp.type('pulsating')
-                ApplicationConstants.broadcastLamp(self.factory)
+                ApplicationConstants.broadcastLamp(self.serverFactory)
         except BaseException as e:
             print("Failed to parse:" + payload + " because " + str(e))
 
