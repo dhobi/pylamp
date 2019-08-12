@@ -218,15 +218,15 @@ class MyClientProtocol(WebSocketClientProtocol):
                 ApplicationConstants.broadcastLamp(self.serverFactory)
             else:
                 ApplicationConstants.myLamp.period(0.5)
-                if data['status'] == 'SUCCESS':
+                if data['build']['status'] == 'SUCCESS':
                     ApplicationConstants.myLamp.color(0, 255, 0)
-                elif data['status'] == 'UNSTABLE':
+                elif data['build']['status'] == 'UNSTABLE':
                     ApplicationConstants.myLamp.color(255, 255, 0)
-                elif data['status'] == 'ABORTED':
+                elif data['build']['status'] == 'ABORTED':
                     ApplicationConstants.myLamp.color(0, 0, 255)
                 else:
                     ApplicationConstants.myLamp.color(255, 0, 0)
-                if data['isBuilding']:
+                if data['build']['phase'] == 'COMPLETED':
                     ApplicationConstants.myLamp.type('off')
                 else:
                     ApplicationConstants.myLamp.type('pulsating')
