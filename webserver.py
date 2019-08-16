@@ -7,13 +7,13 @@ from twisted.python import log
 from twisted.web.server import Site
 from twisted.internet import reactor
 from twisted.web.resource import Resource
+from twisted.internet.protocol import ReconnectingClientFactory
 
 from autobahn.twisted.websocket import WebSocketServerFactory, \
     WebSocketServerProtocol, \
-	WebSocketClientProtocol, \
-	WebSocketClientFactory, \
-	ReconnectingClientFactory, \
-	connectWS
+    WebSocketClientProtocol, \
+    WebSocketClientFactory, \
+    connectWS
 
 from autobahn.twisted.resource import WebSocketResource
 
