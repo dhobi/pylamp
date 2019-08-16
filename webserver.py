@@ -211,6 +211,7 @@ class MyClientProtocol(WebSocketClientProtocol):
         self.serverFactory = factory
 
     def onConnect(self, response):
+        print('Successfully connected.')
         self.factory.resetDelay()
 
     def onMessage(self, payload, isBinary):
