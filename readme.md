@@ -5,10 +5,12 @@ Small hobby project with the aim to control a
  from [ThinkGeek, Inc.](https://www.thinkgeek.com)
  with:
  - Infrared Remote Control
- - Web interface / REST
+ - Web interface / REST / websocket
  - Homekit
  
  ...because the lamp was not geeky enough.
+
+ Can / Should be used as a build status lamp. Works nicely together with Jenkins Websocket.in Notification Plugin.
  
 You will not find a How-To or other install instructions here. Just sample code and sample config files.
 Take over what you need, have fun.
