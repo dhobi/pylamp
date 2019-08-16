@@ -12,6 +12,7 @@ from autobahn.twisted.websocket import WebSocketServerFactory, \
     WebSocketServerProtocol, \
 	WebSocketClientProtocol, \
 	WebSocketClientFactory, \
+	ReconnectingClientFactory, \
 	connectWS
 
 from autobahn.twisted.resource import WebSocketResource
@@ -208,6 +209,10 @@ class MyClientProtocol(WebSocketClientProtocol):
     def __init__(self, factory):
         WebSocketClientProtocol.__init__(self)
         self.serverFactory = factory
+
+    def onConnect(self, response):
+        self.factory.resetDelay()
+
     def onMessage(self, payload, isBinary):
         print("New message from websocket.in:" + payload)
         try:
@@ -234,6 +239,22 @@ class MyClientProtocol(WebSocketClientProtocol):
         except BaseException as e:
             print("Failed to parse:" + payload + " because " + str(e))
 
+class MyClientFactory(ReconnectingClientFactory, WebSocketClientFactory):
+
+    maxDelay = 10
+    maxRetries = 10
+
+    def startedConnecting(self, connector):
+        print('Started to connect.')
+
+    def clientConnectionLost(self, connector, reason):
+        print('Lost connection. Reason: {}'.format(reason))
+        ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
+
+    def clientConnectionFailed(self, connector, reason):
+        print('Connection failed. Reason: {}'.format(reason))
+        ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
+
 def destroy():
     ApplicationConstants.myLamp.destroy()
     remoteDaemon.destroy()
@@ -259,7 +280,7 @@ if __name__ == "__main__":
 
     site = Site(root)
     
-    factoryClient = WebSocketClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
+    factoryClient = MyClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
     factoryClient.protocol = lambda: MyClientProtocol(factory)
     connectWS(factoryClient)
     
