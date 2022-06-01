@@ -1,7 +1,7 @@
 # PyLamp Potion
 
 Small hobby project with the aim to control a
- [LED Potion Desk Lamp](https://www.thinkgeek.com/product/imro) 
+ [LED Potion Desk Lamp](https://www.youtube.com/watch?v=4nb1QUmxPlc) 
  from [ThinkGeek, Inc.](https://www.thinkgeek.com)
  with:
  - Infrared Remote Control
@@ -19,7 +19,7 @@ Take over what you need, have fun.
 
 ## Hardware Ingredients
 
-- Potion Lamp (https://www.thinkgeek.com/product/imro/)
+- Potion Lamp (https://www.youtube.com/watch?v=4nb1QUmxPlc)
 - LED - RGB Clear (https://www.sparkfun.com/products/105)
 - IR Receiver Diode - TSOP38238 (https://www.sparkfun.com/products/10266)
 - Infrared Remote Control (https://www.sparkfun.com/products/14865)
