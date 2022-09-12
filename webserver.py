@@ -5,7 +5,7 @@ import remote
 from twisted.web.static import File
 from twisted.python import log
 from twisted.web.server import Site
-from twisted.internet import reactor
+from twisted.internet import reactor, ssl
 from twisted.web.resource import Resource
 from twisted.internet.protocol import ReconnectingClientFactory
 
@@ -57,7 +57,7 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
 
     def onMessage(self, payload, isBinary):
         data = json.loads(payload)
-        print("New message:" + payload)
+        #print("New message:" + payload.decode('utf8'))
         ApplicationConstants.setFromJson(data)
         ApplicationConstants.broadcastLamp(self.factory)
 
@@ -87,10 +87,10 @@ class BroadcastServerFactory(WebSocketServerFactory):
             self.clients.remove(client)
 
     def broadcast(self, msg):
-        print("broadcasting message '{}' ..".format(msg))
+        #print("broadcasting message '{}' ..".format(msg))
         for c in self.clients:
             c.sendMessage(msg.encode('utf8'))
-            print("message sent to {}".format(c.peer))
+            #print("message sent to {}".format(c.peer))
 
 
 class ColorPage(Resource):
@@ -215,7 +215,7 @@ class MyClientProtocol(WebSocketClientProtocol):
         self.factory.resetDelay()
 
     def onMessage(self, payload, isBinary):
-        print("New message from websocket.in:" + payload)
+        print("New message from websocket.in:" + payload.decode('utf8'))
         try:
             data = json.loads(payload)
 
@@ -238,7 +238,7 @@ class MyClientProtocol(WebSocketClientProtocol):
                     ApplicationConstants.myLamp.type('pulsating')
                 ApplicationConstants.broadcastLamp(self.serverFactory)
         except BaseException as e:
-            print("Failed to parse:" + payload + " because " + str(e))
+            print("Failed to parse:" + payload.decode('utf8') + " because " + str(e))
 
 class MyClientFactory(ReconnectingClientFactory, WebSocketClientFactory):
 
@@ -269,7 +269,7 @@ if __name__ == "__main__":
     factory = BroadcastServerFactory(u"ws://127.0.0.1:80")
     factory.protocol = BroadcastServerProtocol
     resource = WebSocketResource(factory)
-    root.putChild(u"ws", resource)
+    root.putChild(b"ws", resource)
 
     remoteControl = RemoteControl(factory)
     remoteDaemon = remote.Remote(remoteControl.onRemote)
@@ -281,9 +281,10 @@ if __name__ == "__main__":
 
     site = Site(root)
     
-    factoryClient = MyClientFactory(u"wss://connect.websocket.in/pylamp?room_id=1")
+    factoryClient = MyClientFactory(u"wss://websocket-echo.onrender.com")
     factoryClient.protocol = lambda: MyClientProtocol(factory)
-    connectWS(factoryClient)
+    contextFactory = ssl.optionsForClientTLS(hostname=u"websocket-echo.onrender.com")
+    connectWS(factoryClient, contextFactory)
     
     reactor.addSystemEventTrigger('during', 'shutdown', destroy)
     reactor.listenTCP(80, site)
